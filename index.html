@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conect-R | Portal Digital NFC para Restaurantes</title>
+  <meta name="description" content="Descubre cómo Conect-R transforma tu restaurante con un portal digital NFC interactivo. Ahorra miles de dólares al año y moderniza tu negocio desde $200/mes." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS
+    ============================================================ */
+    :root {
+      --navy: #0A0F1E;
+      --navy-mid: #111827;
+      --navy-light: #1a2236;
+      --teal: #00C9A7;
+      --teal-dim: rgba(0, 201, 167, 0.15);
+      --teal-glow: rgba(0, 201, 167, 0.4);
+      --gold: #D4AF37;
+      --gold-dim: rgba(212, 175, 55, 0.15);
+      --white: #ffffff;
+      --gray: #8892a4;
+      --gray-light: #c4cdd8;
+      --card-bg: rgba(255, 255, 255, 0.04);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: var(--font-body);
+      overflow: hidden;
+    }
+
+    /* ============================================================
+       SCROLL CONTAINER
+    ============================================================ */
+    .scroll-container {
+      height: 100vh;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+    }
+
+    .slide {
+      min-height: 100vh;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 80px 24px 40px;
+    }
+
+    /* ============================================================
+       LANGUAGE TOGGLE
+    ============================================================ */
+    #lang-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      background: var(--teal);
+      color: var(--navy);
+      border: none;
+      border-radius: 50px;
+      padding: 10px 20px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px var(--teal-glow);
+    }
+    #lang-toggle:hover {
+      background: #00e8c0;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 28px var(--teal-glow);
+    }
+
+    /* ============================================================
+       SLIDE NAVIGATION DOTS
+    ============================================================ */
+    #nav-dots {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 9998;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .nav-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .nav-dot.active {
+      background: var(--teal);
+      box-shadow: 0 0 8px var(--teal-glow);
+      transform: scale(1.4);
+    }
+
+    /* ============================================================
+       SHARED SECTION STYLES
+    ============================================================ */
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+    .section-subtitle {
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      color: var(--gray-light);
+      text-align: center;
+      margin-bottom: 2.5rem;
+      max-width: 700px;
+      line-height: 1.6;
+    }
+    .teal { color: var(--teal); }
+    .gold { color: var(--gold); }
+    .gray { color: var(--gray); }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 28px;
+      transition: all 0.35s ease;
+      backdrop-filter: blur(8px);
+    }
+    .card:hover {
+      border-color: var(--teal);
+      box-shadow: 0 0 28px var(--teal-glow), inset 0 0 20px rgba(0,201,167,0.04);
+      transform: translateY(-4px);
+    }
+
+    /* Total bar */
+    .total-bar {
+      background: linear-gradient(135deg, rgba(0,201,167,0.15), rgba(0,201,167,0.08));
+      border: 1px solid rgba(0,201,167,0.3);
+      border-radius: 12px;
+      padding: 18px 28px;
+      text-align: center;
+      margin-top: 24px;
+      color: var(--teal);
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: clamp(0.85rem, 1.8vw, 1rem);
+    }
+
+    /* Entrance animation */
+    .animate-in {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .animate-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+    .delay-4 { transition-delay: 0.4s; }
+    .delay-5 { transition-delay: 0.5s; }
+    .delay-6 { transition-delay: 0.6s; }
+
+    /* ============================================================
+       SLIDE 1 — HERO
+    ============================================================ */
+    #slide-1 {
+      background: var(--navy);
+      text-align: center;
+    }
+
+    /* Particle canvas */
+    #particle-canvas {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    /* Gradient orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+    .orb-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(0,201,167,0.12) 0%, transparent 70%);
+      top: -100px; left: -100px;
+      animation: orb-float 8s ease-in-out infinite;
+    }
+    .orb-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%);
+      bottom: -80px; right: -80px;
+      animation: orb-float 10s ease-in-out infinite reverse;
+    }
+    @keyframes orb-float {
+      0%, 100% { transform: translate(0,0); }
+      50% { transform: translate(30px, 20px); }
+    }
+
+    .hero-logo {
+      font-family: var(--font-heading);
+      font-size: clamp(1.4rem, 3vw, 1.8rem);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--teal);
+      margin-bottom: 2.5rem;
+      text-shadow: 0 0 30px var(--teal-glow);
+      position: relative;
+      z-index: 2;
+    }
+    .hero-logo span { color: var(--white); }
+
+    .hero-headline {
+      font-family: var(--font-heading);
+      font-size: clamp(2.2rem, 5.5vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+      background: linear-gradient(135deg, #ffffff 0%, var(--teal) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2.2vw, 1.3rem);
+      color: var(--gray-light);
+      margin-bottom: 2.5rem;
+      position: relative;
+      z-index: 2;
+      max-width: 600px;
+    }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--gray);
+      font-size: 0.75rem;
+      animation: bounce 2s infinite;
+      z-index: 2;
+    }
+    .hero-scroll-hint::after {
+      content: '';
+      width: 2px;
+      height: 30px;
+      background: linear-gradient(to bottom, var(--teal), transparent);
+      border-radius: 2px;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ============================================================
+       SLIDE 2 — PROBLEM
+    ============================================================ */
+    #slide-2 { background: var(--navy-mid); }
+
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .pain-card {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .pain-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .pain-card h3 {
+      font-family: var(--font-heading);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800;
+      color: var(--teal);
+      margin-bottom: 4px;
+    }
+    .pain-card p {
+      font-size: clamp(0.8rem, 1.5vw, 0.92rem);
+      color: var(--gray-light);
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       SLIDE 3 — SOLUTION
+    ============================================================ */
+    #slide-3 { background: var(--navy); }
+
+    .solution-layout {
+      display: flex;
+      gap: 60px;
+      align-items: center;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    /* Phone mockup */
+    .phone-mockup {
+      flex-shrink: 0;
+      width: 180px;
+      height: 320px;
+      background: linear-gradient(160deg, #1a2236 0%, #0d1526 100%);
+      border-radius: 30px;
+      border: 2px solid rgba(0,201,167,0.4);
+      box-shadow: 0 0 40px rgba(0,201,167,0.25), 0 0 80px rgba(0,201,167,0.1);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 14px;
+      animation: phone-pulse 3s ease-in-out infinite;
+    }
+    @keyframes phone-pulse {
+      0%, 100% { box-shadow: 0 0 40px rgba(0,201,167,0.25), 0 0 80px rgba(0,201,167,0.1); }
+      50% { box-shadow: 0 0 60px rgba(0,201,167,0.45), 0 0 100px rgba(0,201,167,0.2); }
+    }
+    .phone-notch {
+      width: 60px; height: 10px;
+      background: var(--navy);
+      border-radius: 10px;
+      margin-bottom: 14px;
+    }
+    .phone-screen-logo {
+      font-family: var(--font-heading);
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--teal);
+      margin-bottom: 10px;
+    }
+    .phone-menu-item {
+      width: 100%;
+      background: rgba(0,201,167,0.08);
+      border: 1px solid rgba(0,201,167,0.2);
+      border-radius: 8px;
+      padding: 7px 10px;
+      margin-bottom: 7px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .phone-item-img {
+      width: 28px; height: 28px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+    .phone-item-text {
+      font-size: 0.55rem;
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.3;
+    }
+    .phone-item-price {
+      font-size: 0.5rem;
+      color: var(--gold);
+      font-weight: 700;
+    }
+    .phone-nfc-badge {
+      margin-top: auto;
+      background: var(--teal);
+      color: var(--navy);
+      font-size: 0.5rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+    }
+
+    .solution-bullets {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 1;
+    }
+    .solution-bullet {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px 20px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+    .solution-bullet:hover {
+      border-color: var(--teal);
+      box-shadow: 0 0 20px var(--teal-glow);
+    }
+    .bullet-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .solution-bullet p {
+      font-size: clamp(0.82rem, 1.5vw, 0.95rem);
+      color: var(--gray-light);
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       SLIDE 4 — MENU COMPARISON
+    ============================================================ */
+    #slide-4 { background: var(--navy-mid); padding: 60px 24px 40px; }
+
+    .comparison-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      width: 100%;
+      max-width: 1000px;
+      margin-bottom: 20px;
+    }
+
+    /* LEFT — Traditional */
+    .menu-traditional {
+      background: #f0ece4;
+      border-radius: 12px;
+      padding: 24px;
+      color: #222;
+      position: relative;
+    }
+    .menu-trad-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 14px;
+      display: block;
+    }
+    .menu-trad-title {
+      font-family: 'Georgia', serif;
+      font-size: 1.1rem;
+      text-align: center;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+      color: #333;
+    }
+    .menu-trad-item {
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem;
+      color: #333;
+      padding: 8px 0;
+      border-bottom: 1px dotted #ccc;
+      display: flex;
+      justify-content: space-between;
+    }
+    .menu-trad-name { flex: 1; }
+    .menu-trad-dots {
+      flex: 1;
+      border-bottom: 1px dotted #999;
+      margin: 0 6px;
+      align-self: flex-end;
+      margin-bottom: 4px;
+    }
+    .menu-trad-price { color: #444; font-weight: bold; }
+    .menu-trad-footer {
+      margin-top: 14px;
+      font-size: 0.72rem;
+      color: #999;
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* RIGHT — Digital */
+    .menu-digital {
+      background: linear-gradient(160deg, #0d1a2e 0%, #0a1520 100%);
+      border: 1px solid rgba(0,201,167,0.3);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 40px rgba(0,201,167,0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    .menu-digital::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--teal), transparent);
+    }
+    .menu-dig-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 12px;
+      display: block;
+    }
+    .menu-dig-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      transition: all 0.3s ease;
+    }
+    .menu-dig-item:hover {
+      border-color: rgba(0,201,167,0.3);
+      background: rgba(0,201,167,0.05);
+    }
+    .food-photo {
+      width: 64px;
+      height: 60px;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+    .food-photo-1 { background: linear-gradient(135deg, #8B3A00, #C4621A, #8B3A00); }
+    .food-photo-2 { background: linear-gradient(135deg, #2D6A1F, #6BBF47, #2D6A1F); }
+    .food-photo-3 { background: linear-gradient(135deg, #1A4060, #2E86C1, #D4813A); }
+    .menu-dig-info { flex: 1; }
+    .menu-dig-name {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .menu-dig-desc {
+      font-size: 0.68rem;
+      color: var(--gray-light);
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+    .menu-dig-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .menu-dig-price {
+      color: var(--gold);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .order-btn {
+      background: var(--teal);
+      color: var(--navy);
+      border: none;
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 0.62rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: var(--font-body);
+    }
+    .menu-dig-caption {
+      font-size: 0.72rem;
+      color: var(--teal);
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .comparison-stat {
+      text-align: center;
+      font-family: var(--font-heading);
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      font-weight: 700;
+      color: var(--teal);
+      background: rgba(0,201,167,0.08);
+      border: 1px solid rgba(0,201,167,0.2);
+      border-radius: 12px;
+      padding: 14px 28px;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    /* ============================================================
+       SLIDE 5 — MENU ROI
+    ============================================================ */
+    #slide-5 { background: var(--navy); }
+
+    .roi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      width: 100%;
+      max-width: 1000px;
+    }
+    .roi-card {
+      text-align: center;
+      padding: 28px 20px;
+    }
+    .roi-icon { font-size: 2.2rem; margin-bottom: 12px; }
+    .roi-card h3 {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--teal);
+      margin-bottom: 10px;
+    }
+    .roi-card p {
+      font-size: clamp(0.78rem, 1.4vw, 0.88rem);
+      color: var(--gray-light);
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+    .roi-number {
+      font-family: var(--font-heading);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 6px;
+    }
+    .roi-note {
+      font-size: 0.72rem;
+      color: var(--gray);
+      font-style: italic;
+    }
+
+    /* ============================================================
+       SLIDE 6 — CHATBOT ROI
+    ============================================================ */
+    #slide-6 { background: var(--navy-mid); }
+
+    .chatbot-intro {
+      font-size: clamp(0.85rem, 1.8vw, 1rem);
+      color: var(--gray-light);
+      text-align: center;
+      max-width: 780px;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    /* reuse roi-grid / roi-card */
+
+    /* ============================================================
+       SLIDE 7 — PORTAL BENEFITS
+    ============================================================ */
+    #slide-7 { background: var(--navy); }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      width: 100%;
+      max-width: 1000px;
+    }
+    .benefit-card {
+      padding: 22px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .benefit-icon { font-size: 1.8rem; }
+    .benefit-card h4 {
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--teal);
+    }
+    .benefit-card p {
+      font-size: clamp(0.75rem, 1.3vw, 0.83rem);
+      color: var(--gray-light);
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       SLIDE 8 — CALCULATOR
+    ============================================================ */
+    #slide-8 { background: var(--navy-mid); }
+
+    .calc-card {
+      width: 100%;
+      max-width: 700px;
+      padding: 36px 40px;
+    }
+
+    .calc-row {
+      margin-bottom: 24px;
+    }
+    .calc-label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--gray-light);
+      margin-bottom: 8px;
+    }
+    .calc-slider {
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      background: rgba(0,201,167,0.2);
+      border-radius: 6px;
+      outline: none;
+      cursor: pointer;
+    }
+    .calc-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--teal);
+      box-shadow: 0 0 12px var(--teal-glow);
+      cursor: pointer;
+    }
+    .calc-slider-val {
+      display: inline-block;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      color: var(--teal);
+      font-size: 1rem;
+      margin-top: 6px;
+    }
+    .calc-input {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: var(--white);
+      font-size: 1rem;
+      font-family: var(--font-body);
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .calc-input:focus { border-color: var(--teal); }
+
+    .calc-results {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(0,201,167,0.15);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-top: 8px;
+    }
+    .calc-result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.88rem;
+      color: var(--gray-light);
+    }
+    .calc-result-row:last-child { border-bottom: none; }
+    .calc-result-val {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      color: var(--teal);
+    }
+    .calc-net-gain {
+      text-align: center;
+      margin-top: 16px;
+    }
+    .calc-net-label {
+      font-size: 0.85rem;
+      color: var(--gray-light);
+      margin-bottom: 4px;
+    }
+    .calc-net-number {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      font-weight: 800;
+      color: var(--gold);
+      display: block;
+      transition: all 0.3s ease;
+    }
+    .calc-note {
+      font-size: 0.72rem;
+      color: var(--gray);
+      text-align: center;
+      margin-top: 12px;
+      font-style: italic;
+    }
+
+    /* ============================================================
+       SLIDE 9 — PRICING
+    ============================================================ */
+    #slide-9 { background: var(--navy); }
+
+    .pricing-card {
+      max-width: 600px;
+      width: 100%;
+      padding: 40px;
+      border: 1px solid rgba(0,201,167,0.4);
+      border-radius: 24px;
+      background: linear-gradient(160deg, rgba(0,201,167,0.06) 0%, rgba(0,0,0,0.2) 100%);
+      animation: pricing-glow 3s ease-in-out infinite;
+      position: relative;
+    }
+    @keyframes pricing-glow {
+      0%, 100% { box-shadow: 0 0 30px rgba(0,201,167,0.2), 0 0 60px rgba(0,201,167,0.1); }
+      50% { box-shadow: 0 0 50px rgba(0,201,167,0.4), 0 0 100px rgba(0,201,167,0.2); }
+    }
+
+    .pricing-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--teal), #00a08a);
+      color: var(--navy);
+      font-family: var(--font-heading);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 6px 18px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+      letter-spacing: 0.03em;
+    }
+
+    .pricing-main {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .pricing-amount {
+      font-family: var(--font-heading);
+      font-size: clamp(2.8rem, 6vw, 4rem);
+      font-weight: 800;
+      color: var(--teal);
+      line-height: 1;
+    }
+    .pricing-original {
+      font-size: 1.2rem;
+      color: var(--gray);
+      text-decoration: line-through;
+      margin-left: 12px;
+    }
+
+    .pricing-divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      margin: 20px 0;
+    }
+
+    .pricing-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .pricing-features li {
+      font-size: clamp(0.83rem, 1.6vw, 0.95rem);
+      color: var(--gray-light);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pricing-features li span:first-child { color: var(--teal); font-size: 1rem; }
+
+    .pricing-value {
+      text-align: center;
+      font-family: var(--font-heading);
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      font-weight: 700;
+      color: var(--teal);
+      margin-bottom: 6px;
+    }
+    .pricing-question {
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ============================================================
+       SLIDE 10 — CTA
+    ============================================================ */
+    #slide-10 {
+      background: linear-gradient(160deg, #0A0F1E 0%, #0d1a2e 50%, #0A0F1E 100%);
+      text-align: center;
+    }
+
+    .cta-headline {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #ffffff 0%, var(--teal) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .cta-sub {
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: var(--gray-light);
+      max-width: 600px;
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+    }
+    .cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+    .btn-primary {
+      display: inline-block;
+      background: var(--teal);
+      color: var(--navy);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 16px 32px;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 24px var(--teal-glow);
+    }
+    .btn-primary:hover {
+      background: #00e8c0;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(0,201,167,0.6);
+    }
+    .btn-secondary {
+      display: inline-block;
+      background: transparent;
+      color: var(--teal);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 16px 32px;
+      border-radius: 50px;
+      text-decoration: none;
+      border: 2px solid var(--teal);
+      transition: all 0.3s ease;
+    }
+    .btn-secondary:hover {
+      background: var(--teal-dim);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px var(--teal-glow);
+    }
+    .cta-footer {
+      font-size: 0.8rem;
+      color: var(--gray);
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 768px) {
+      body { overflow: hidden; }
+
+      .pain-grid {
+        grid-template-columns: 1fr;
+        max-height: 70vh;
+        overflow-y: auto;
+        padding-right: 4px;
+      }
+
+      .solution-layout {
+        flex-direction: column;
+        gap: 28px;
+      }
+      .phone-mockup { width: 140px; height: 260px; }
+
+      .comparison-wrap {
+        grid-template-columns: 1fr;
+        max-height: 65vh;
+        overflow-y: auto;
+      }
+
+      .roi-grid, .benefits-grid {
+        grid-template-columns: 1fr;
+        max-height: 65vh;
+        overflow-y: auto;
+        padding-right: 4px;
+      }
+
+      .calc-card { padding: 24px 20px; }
+
+      .cta-buttons { flex-direction: column; align-items: center; }
+
+      #nav-dots { display: none; }
+
+      .pricing-card { padding: 28px 20px; }
+    }
+
+    @media (max-width: 480px) {
+      .section-title { font-size: 1.5rem; }
+      .hero-headline { font-size: 1.9rem; }
+      .roi-grid { grid-template-columns: 1fr; }
+      .benefits-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Scrollbar styling for inner scrollable grids */
+    .pain-grid::-webkit-scrollbar,
+    .roi-grid::-webkit-scrollbar,
+    .benefits-grid::-webkit-scrollbar,
+    .comparison-wrap::-webkit-scrollbar {
+      width: 4px;
+    }
+    .pain-grid::-webkit-scrollbar-track,
+    .roi-grid::-webkit-scrollbar-track,
+    .benefits-grid::-webkit-scrollbar-track,
+    .comparison-wrap::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .pain-grid::-webkit-scrollbar-thumb,
+    .roi-grid::-webkit-scrollbar-thumb,
+    .benefits-grid::-webkit-scrollbar-thumb,
+    .comparison-wrap::-webkit-scrollbar-thumb {
+      background: var(--teal);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Language Toggle -->
+  <button id="lang-toggle" onclick="toggleLang()" aria-label="Toggle language">🌐 EN</button>
+
+  <!-- Navigation Dots -->
+  <nav id="nav-dots" aria-label="Slide navigation">
+    <div class="nav-dot active" onclick="goToSlide(0)" title="Hero"></div>
+    <div class="nav-dot" onclick="goToSlide(1)" title="Problema"></div>
+    <div class="nav-dot" onclick="goToSlide(2)" title="Solución"></div>
+    <div class="nav-dot" onclick="goToSlide(3)" title="Comparación"></div>
+    <div class="nav-dot" onclick="goToSlide(4)" title="ROI Menú"></div>
+    <div class="nav-dot" onclick="goToSlide(5)" title="ROI Chatbot"></div>
+    <div class="nav-dot" onclick="goToSlide(6)" title="Portal"></div>
+    <div class="nav-dot" onclick="goToSlide(7)" title="Calculadora"></div>
+    <div class="nav-dot" onclick="goToSlide(8)" title="Precio"></div>
+    <div class="nav-dot" onclick="goToSlide(9)" title="CTA"></div>
+  </nav>
+
+  <!-- ============================================================
+       SCROLL CONTAINER
+  ============================================================ -->
+  <main class="scroll-container" id="scroll-container">
+
+    <!-- ============================
+         SLIDE 1 — HERO
+    ============================= -->
+    <section class="slide" id="slide-1" aria-label="Hero">
+      <canvas id="particle-canvas"></canvas>
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+
+      <div class="hero-logo animate-in" style="position:relative;z-index:2;">
+        CONECT<span>-R</span>
+      </div>
+
+      <h1 class="hero-headline animate-in delay-1" data-key="hero_headline">
+        ¿Cuánto te está costando tu menú impreso?
+      </h1>
+      <p class="hero-sub animate-in delay-2" data-key="hero_sub">
+        Descubre cómo un portal digital NFC puede transformar tu restaurante
+      </p>
+
+      <div class="hero-scroll-hint animate-in delay-3" data-key="hero_scroll">
+        Desliza para ver
+      </div>
+    </section>
+
+    <!-- ============================
+         SLIDE 2 — PROBLEM
+    ============================= -->
+    <section class="slide" id="slide-2" aria-label="El problema">
+      <h2 class="section-title animate-in" data-key="prob_title">
+        El problema con los <span class="teal">menús físicos</span>
+      </h2>
+      <p class="section-subtitle animate-in delay-1" data-key="prob_sub">
+        Los números no mienten — cada día sin un portal digital te cuesta dinero real
+      </p>
+
+      <div class="pain-grid">
+        <div class="card pain-card animate-in delay-1">
+          <div class="pain-icon">🖨️</div>
+          <div>
+            <h3>$4,800</h3>
+            <p data-key="pain_1">Un restaurante mediano gasta $2,400–$4,800 al año solo en impresión</p>
+          </div>
+        </div>
+        <div class="card pain-card animate-in delay-2">
+          <div class="pain-icon">🎨</div>
+          <div>
+            <h3>$10,000</h3>
+            <p data-key="pain_2">Rediseños + diseñador gráfico: hasta $10,000 anuales</p>
+          </div>
+        </div>
+        <div class="card pain-card animate-in delay-3">
+          <div class="pain-icon">⏱️</div>
+          <div>
+            <h3>180 hrs</h3>
+            <p data-key="pain_3">180+ horas al año sanitizando menús físicos</p>
+          </div>
+        </div>
+        <div class="card pain-card animate-in delay-4">
+          <div class="pain-icon">😤</div>
+          <div>
+            <h3>86%</h3>
+            <p data-key="pain_4">Menús desactualizados frustran al 86% de los clientes</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================
+         SLIDE 3 — SOLUTION
+    ============================= -->
+    <section class="slide" id="slide-3" aria-label="La solución">
+      <h2 class="section-title animate-in" data-key="sol_title">
+        Tu portal digital <span class="teal">Conect-R</span>
+      </h2>
+
+      <div class="solution-layout animate-in delay-1">
+        <!-- Phone Mockup -->
+        <div class="phone-mockup" aria-label="Phone mockup of Conect-R portal">
+          <div class="phone-notch"></div>
+          <div class="phone-screen-logo">CONECT-R</div>
+          <div class="phone-menu-item">
+            <div class="phone-item-img" style="background:linear-gradient(135deg,#8B3A00,#C4621A);"></div>
+            <div>
+              <div class="phone-item-text">Carne Asada</div>
+              <div class="phone-item-price">$16</div>
+            </div>
+          </div>
+          <div class="phone-menu-item">
+            <div class="phone-item-img" style="background:linear-gradient(135deg,#2D6A1F,#6BBF47);"></div>
+            <div>
+              <div class="phone-item-text">Enchiladas</div>
+              <div class="phone-item-price">$13</div>
+            </div>
+          </div>
+          <div class="phone-menu-item">
+            <div class="phone-item-img" style="background:linear-gradient(135deg,#1A4060,#D4813A);"></div>
+            <div>
+              <div class="phone-item-text">Camarones</div>
+              <div class="phone-item-price">$18</div>
+            </div>
+          </div>
+          <div class="phone-nfc-badge">✦ NFC TAP</div>
+        </div>
+
+        <!-- Bullets -->
+        <div class="solution-bullets">
+          <div class="solution-bullet animate-in delay-2">
+            <span class="bullet-icon">🍽️</span>
+            <p data-key="sol_1">Menú digital interactivo con fotos y precios actualizables al instante</p>
+          </div>
+          <div class="solution-bullet animate-in delay-3">
+            <span class="bullet-icon">📅</span>
+            <p data-key="sol_2">Enlace directo a reservaciones</p>
+          </div>
+          <div class="solution-bullet animate-in delay-4">
+            <span class="bullet-icon">⏳</span>
+            <p data-key="sol_3">Lista de espera digital</p>
+          </div>
+          <div class="solution-bullet animate-in delay-5">
+            <span class="bullet-icon">📡</span>
+            <p data-key="sol_4">Stand NFC físico en tu mesa — solo acerca el teléfono y accede al portal</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================
+         SLIDE 4 — MENU COMPARISON
+    ============================= -->
+    <section class="slide" id="slide-4" aria-label="Comparación de menús">
+      <h2 class="section-title animate-in" data-key="comp_title">
+        La diferencia que se ve... <span class="teal">y se antoja</span>
+      </h2>
+
+      <div class="comparison-wrap animate-in delay-1">
+        <!-- LEFT: Traditional -->
+        <div class="menu-traditional">
+          <span class="menu-trad-label" data-key="comp_left_label">▲ Menú tradicional</span>
+          <div class="menu-trad-title">— MENÚ —</div>
+          <div class="menu-trad-item">
+            <span class="menu-trad-name">Carne Asada</span>
+            <span class="menu-trad-dots"></span>
+            <span class="menu-trad-price">$16</span>
+          </div>
+          <div class="menu-trad-item">
+            <span class="menu-trad-name">Enchiladas Verdes</span>
+            <span class="menu-trad-dots"></span>
+            <span class="menu-trad-price">$13</span>
+          </div>
+          <div class="menu-trad-item">
+            <span class="menu-trad-name">Camarones al Mojo</span>
+            <span class="menu-trad-dots"></span>
+            <span class="menu-trad-price">$18</span>
+          </div>
+          <p class="menu-trad-footer" data-key="comp_left_footer">Sin fotos. Sin descripción. Sin antojo.</p>
+        </div>
+
+        <!-- RIGHT: Digital -->
+        <div class="menu-digital">
+          <span class="menu-dig-label" data-key="comp_right_label">✦ Menú digital Conect-R</span>
+
+          <div class="menu-dig-item">
+            <div class="food-photo food-photo-1"></div>
+            <div class="menu-dig-info">
+              <div class="menu-dig-name">Carne Asada</div>
+              <div class="menu-dig-desc" data-key="dig_desc_1">Corte premium a las brasas, servido con guacamole fresco, pico de gallo y tortillas hechas a mano</div>
+              <div class="menu-dig-footer">
+                <span class="menu-dig-price">$16</span>
+                <button class="order-btn" data-key="order_btn">🛒 Ordenar</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="menu-dig-item">
+            <div class="food-photo food-photo-2"></div>
+            <div class="menu-dig-info">
+              <div class="menu-dig-name">Enchiladas Verdes</div>
+              <div class="menu-dig-desc" data-key="dig_desc_2">Tres enchiladas bañadas en salsa verde casera, crema, queso fresco y cebolla morada</div>
+              <div class="menu-dig-footer">
+                <span class="menu-dig-price">$13</span>
+                <button class="order-btn" data-key="order_btn">🛒 Ordenar</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="menu-dig-item">
+            <div class="food-photo food-photo-3"></div>
+            <div class="menu-dig-info">
+              <div class="menu-dig-name">Camarones al Mojo de Ajo</div>
+              <div class="menu-dig-desc" data-key="dig_desc_3">Camarones jumbo salteados en mantequilla, ajo dorado y un toque de limón</div>
+              <div class="menu-dig-footer">
+                <span class="menu-dig-price">$18</span>
+                <button class="order-btn" data-key="order_btn">🛒 Ordenar</button>
+              </div>
+            </div>
+          </div>
+
+          <p class="menu-dig-caption" data-key="comp_right_footer">Con fotos. Con descripción. Con antojo garantizado.</p>
+        </div>
+      </div>
+
+      <div class="comparison-stat animate-in delay-3" data-key="comp_stat">
+        📊 Los menús con fotos aumentan el ticket promedio hasta un <span class="gold">30%</span>
+      </div>
+    </section>
+
+    <!-- ============================
+         SLIDE 5 — MENU ROI
+    ============================= -->
+    <section class="slide" id="slide-5" aria-label="ROI del menú digital">
+      <h2 class="section-title animate-in" data-key="mroi_title">
+        Lo que te ahorra el <span class="teal">menú digital</span> al año
+      </h2>
+
+      <div class="roi-grid">
+        <div class="card roi-card animate-in delay-1">
+          <div class="roi-icon">🖨️</div>
+          <h3 data-key="mroi_1_title">Impresión eliminada</h3>
+          <p data-key="mroi_1_body">Dejas de gastar entre $2,400 y $4,800 al año en reimpresiones, diseñadores y materiales</p>
+          <span class="roi-number">Hasta $4,800/año</span>
+        </div>
+        <div class="card roi-card animate-in delay-2">
+          <div class="roi-icon">⏱️</div>
+          <h3 data-key="mroi_2_title">180+ horas recuperadas</h3>
+          <p data-key="mroi_2_body">Tu equipo deja de sanitizar, organizar y reemplazar menús físicos. Ese tiempo vale dinero.</p>
+          <span class="roi-number" data-key="mroi_2_num">Hasta $2,700/año en labor</span>
+          <span class="roi-note" data-key="mroi_2_note">(basado en $15/hr × 180 horas)</span>
+        </div>
+        <div class="card roi-card animate-in delay-3">
+          <div class="roi-icon">📈</div>
+          <h3 data-key="mroi_3_title">Ticket promedio más alto</h3>
+          <p data-key="mroi_3_body">Los menús con fotos y descripciones generan hasta 30% más por mesa. En un restaurante con $500K en ventas anuales eso son $150,000 adicionales.</p>
+          <span class="roi-number">+30% en ventas</span>
+        </div>
+      </div>
+
+      <div class="total-bar animate-in delay-4" data-key="mroi_total">
+        💰 Beneficio económico estimado del menú digital: <strong>$7,500–$157,500 al año</strong> según el volumen de tu restaurante
+      </div>
+    </section>
+
+    <!-- ============================
+         SLIDE 6 — CHATBOT ROI
+    ============================= -->
+    <section class="slide" id="slide-6" aria-label="ROI del chatbot IA">
+      <h2 class="section-title animate-in" data-key="croi_title">
+        Lo que te ahorra el <span class="teal">chatbot con IA</span> al año
+      </h2>
+      <p class="chatbot-intro animate-in delay-1" data-key="croi_intro">
+        Tu portal incluye un asistente virtual inteligente disponible 24/7 que responde preguntas, toma reservaciones y guía a tus clientes — sin que tú ni tu equipo levanten el teléfono.
+      </p>
+
+      <div class="roi-grid">
+        <div class="card roi-card animate-in delay-1">
+          <div class="roi-icon">📞</div>
+          <h3 data-key="croi_1_title">Llamadas reducidas</h3>
+          <p data-key="croi_1_body">El chatbot responde automáticamente: horarios, dirección, menú, reservaciones, eventos y más. Un restaurante recibe entre 20 y 50 llamadas repetitivas por día.</p>
+          <p style="font-size:0.82rem;color:var(--gray-light);margin-bottom:12px;" data-key="croi_1_sub">Ahorro estimado en tiempo de staff: 2–4 horas diarias</p>
+          <span class="roi-number" data-key="croi_1_num">Hasta $21,900/año en labor</span>
+          <span class="roi-note" data-key="croi_1_note">(basado en $15/hr × 4 hrs × 365 días)</span>
+        </div>
+        <div class="card roi-card animate-in delay-2">
+          <div class="roi-icon">🌙</div>
+          <h3 data-key="croi_2_title">Atención fuera de horario</h3>
+          <p data-key="croi_2_body">El chatbot trabaja cuando tu restaurante está cerrado. Captura clientes que de otra forma llamarían a la competencia.</p>
+          <p style="font-size:0.82rem;color:var(--gray-light);margin-bottom:12px;" data-key="croi_2_sub">Reservaciones e información disponibles las 24 horas, los 7 días de la semana</p>
+          <span class="roi-number">24/7</span>
+        </div>
+        <div class="card roi-card animate-in delay-3">
+          <div class="roi-icon">⭐</div>
+          <h3 data-key="croi_3_title">Experiencia del cliente</h3>
+          <p data-key="croi_3_body">Clientes que obtienen respuesta inmediata tienen 70% más probabilidad de regresar y dejar una reseña positiva.</p>
+          <p style="font-size:0.82rem;color:var(--gray-light);margin-bottom:12px;" data-key="croi_3_sub">Más reseñas = más visibilidad en Google = más clientes nuevos</p>
+          <span class="roi-number" data-key="croi_3_num">+70% retención</span>
+        </div>
+      </div>
+
+      <div class="total-bar animate-in delay-4" data-key="croi_total">
+        🤖 Beneficio económico estimado del chatbot IA: <strong>$15,000–$22,000 al año</strong> en tiempo de staff recuperado
+      </div>
+    </section>
+
+    <!-- ============================
+         SLIDE 7 — PORTAL BENEFITS
+    ============================= -->
+    <section class="slide" id="slide-7" aria-label="Beneficios del portal completo">
+      <h2 class="section-title animate-in" data-key="port_title">
+        Lo que te genera el <span class="teal">portal completo</span> al año
+      </h2>
+      <p class="section-subtitle animate-in delay-1" data-key="port_sub">
+        Tu portal no es solo un menú — es tu presencia digital completa funcionando para ti las 24 horas.
+      </p>
+
+      <div class="benefits-grid">
+        <div class="card benefit-card animate-in delay-1">
+          <div class="benefit-icon">📅</div>
+          <h4 data-key="ben_1_title">Eventos y Catering</h4>
+          <p data-key="ben_1_body">Promociona eventos directamente. Un evento de catering promedio genera $3,000–$8,000</p>
+        </div>
+        <div class="card benefit-card animate-in delay-2">
+          <div class="benefit-icon">⭐</div>
+          <h4 data-key="ben_2_title">Google Reviews</h4>
+          <p data-key="ben_2_body">Más reseñas = más clientes nuevos. Cada estrella adicional en Google puede aumentar ingresos hasta un 9%</p>
+        </div>
+        <div class="card benefit-card animate-in delay-3">
+          <div class="benefit-icon">🔒</div>
+          <h4 data-key="ben_3_title">Quejas Internas</h4>
+          <p data-key="ben_3_body">Corriges problemas antes de que se vuelvan reseñas negativas públicas. Una mala reseña cuesta en promedio $3,000 en clientes perdidos</p>
+        </div>
+        <div class="card benefit-card animate-in delay-4">
+          <div class="benefit-icon">📱</div>
+          <h4 data-key="ben_4_title">Redes Sociales</h4>
+          <p data-key="ben_4_body">Links directos a Instagram, Facebook, TikTok. Más seguidores = marketing gratuito</p>
+        </div>
+        <div class="card benefit-card animate-in delay-5">
+          <div class="benefit-icon">🌐</div>
+          <h4 data-key="ben_5_title">Sitio Web</h4>
+          <p data-key="ben_5_body">Tráfico directo a tu página oficial desde cada escaneo NFC</p>
+        </div>
+        <div class="card benefit-card animate-in delay-6">
+          <div class="benefit-icon">🔄</div>
+          <h4 data-key="ben_6_title">Actualizaciones de Menú</h4>
+          <p data-key="ben_6_body">Cambia precios, platillos y promociones en minutos, sin costo extra</p>
+        </div>
+      </div>
+
+      <div class="total-bar animate-in delay-4" data-key="port_total">
+        🏆 Beneficio económico total estimado del portal: <strong>$25,000–$180,000 al año</strong>
+      </div>
+    </section>
+
+    <!-- ============================
+         SLIDE 8 — CALCULATOR
+    ============================= -->
+    <section class="slide" id="slide-8" aria-label="Calculadora de ahorro">
+      <h2 class="section-title animate-in" data-key="calc_title">
+        ¿Cuánto puedes <span class="teal">ahorrar?</span>
+      </h2>
+
+      <div class="card calc-card animate-in delay-1">
+        <div class="calc-row">
+          <label class="calc-label" for="reprint-slider" data-key="calc_slider_label">
+            ¿Cuántas veces reimprimes tu menú al año?
+          </label>
+          <input type="range" id="reprint-slider" class="calc-slider" min="1" max="12" value="4" oninput="updateCalc()" />
+          <div>
+            <span class="calc-slider-val" id="reprint-val">4</span>
+            <span class="gray" data-key="calc_times"> veces</span>
+          </div>
+        </div>
+
+        <div class="calc-row">
+          <label class="calc-label" for="cost-input" data-key="calc_cost_label">
+            Costo por reimpresión ($)
+          </label>
+          <input type="number" id="cost-input" class="calc-input" value="400" min="50" max="5000" oninput="updateCalc()" />
+        </div>
+
+        <div class="calc-results">
+          <div class="calc-result-row">
+            <span data-key="calc_r1">💸 Gastas actualmente en impresión</span>
+            <span class="calc-result-val" id="r-print">$1,600/año</span>
+          </div>
+          <div class="calc-result-row">
+            <span data-key="calc_r2">⏱️ Ahorro en labor (180 hrs × $15)</span>
+            <span class="calc-result-val">$2,700</span>
+          </div>
+          <div class="calc-result-row">
+            <span data-key="calc_r3">🤖 Ahorro estimado con chatbot IA</span>
+            <span class="calc-result-val">$21,900/año</span>
+          </div>
+          <div class="calc-result-row" style="border-top:1px solid rgba(0,201,167,0.3);margin-top:6px;padding-top:14px;">
+            <span style="font-weight:700;color:var(--white);" data-key="calc_total">TOTAL AHORRADO AL AÑO</span>
+            <span class="calc-result-val" id="r-total" style="font-size:1.1rem;">$26,200</span>
+          </div>
+          <div class="calc-result-row">
+            <span data-key="calc_cost">💳 Costo Conect-R ($200/mes)</span>
+            <span class="calc-result-val" style="color:var(--gray);">- $2,400/año</span>
+          </div>
+        </div>
+
+        <div class="calc-net-gain">
+          <div class="calc-net-label" data-key="calc_net_label">Tu ganancia neta estimada</div>
+          <span class="calc-net-number" id="net-gain">$23,800</span>
+        </div>
+        <p class="calc-note" data-key="calc_note">Cálculo conservador. Los beneficios reales pueden ser significativamente mayores.</p>
+      </div>
+    </section>
+
+    <!-- ============================
+         SLIDE 9 — PRICING
+    ============================= -->
+    <section class="slide" id="slide-9" aria-label="Oferta de lanzamiento">
+      <h2 class="section-title animate-in" data-key="price_title">
+        Oferta de <span class="teal">lanzamiento</span>
+      </h2>
+
+      <div class="pricing-card animate-in delay-1">
+        <div style="text-align:center;">
+          <span class="pricing-badge" data-key="price_badge">⚡ Precio especial por tiempo limitado</span>
+        </div>
+
+        <div class="pricing-main">
+          <span class="pricing-amount" data-key="price_amount">$200/mes</span>
+          <span class="pricing-original" data-key="price_original">$450/mes</span>
+        </div>
+
+        <hr class="pricing-divider" />
+
+        <ul class="pricing-features">
+          <li><span>✅</span><span data-key="pf_1">Portal digital interactivo personalizado</span></li>
+          <li><span>✅</span><span data-key="pf_2">Menú digital con fotos y descripciones</span></li>
+          <li><span>✅</span><span data-key="pf_3">Stand NFC físico para tus mesas</span></li>
+          <li><span>✅</span><span data-key="pf_4">Chatbot con IA disponible 24/7</span></li>
+          <li><span>✅</span><span data-key="pf_5">Google Reviews, redes sociales y enlaces de eventos</span></li>
+          <li><span>✅</span><span data-key="pf_6">Sistema privado de quejas internas</span></li>
+          <li><span>✅</span><span data-key="pf_7">4 actualizaciones de menú al mes — envíanos todos los cambios que necesites en un solo mensaje y los aplicamos el mismo día</span></li>
+          <li><span>✅</span><span data-key="pf_8">Soporte incluido</span></li>
+        </ul>
+
+        <hr class="pricing-divider" />
+
+        <p class="pricing-value" data-key="price_value">
+          Tú ahorras hasta $180,000 al año. Nosotros te cobramos $2,400.
+        </p>
+        <p class="pricing-question" data-key="price_question">¿Tiene sentido el negocio?</p>
+      </div>
+    </section>
+
+    <!-- ============================
+         SLIDE 10 — CTA
+    ============================= -->
+    <section class="slide" id="slide-10" aria-label="Llamada a la acción">
+      <div class="orb orb-1" style="opacity:0.5;"></div>
+      <div class="orb orb-2" style="opacity:0.5;"></div>
+
+      <h2 class="cta-headline animate-in" data-key="cta_title" style="position:relative;z-index:2;">
+        ¿Listo para modernizar tu restaurante?
+      </h2>
+      <p class="cta-sub animate-in delay-1" data-key="cta_sub" style="position:relative;z-index:2;">
+        Conect-R te construye tu portal en días, no meses. Cupos limitados al precio de lanzamiento.
+      </p>
+
+      <div class="cta-buttons animate-in delay-2" style="position:relative;z-index:2;">
+        <a href="https://ricardo-orozco.conect-r.com" class="btn-primary" target="_blank" rel="noopener noreferrer" id="cta-btn-primary" data-key="cta_btn1">
+          Agenda tu demo gratis
+        </a>
+        <a href="https://maya-cantina-portal.vercel.app" class="btn-secondary" target="_blank" rel="noopener noreferrer" id="cta-btn-secondary" data-key="cta_btn2">
+          Ver ejemplo en vivo
+        </a>
+      </div>
+
+      <footer class="cta-footer" style="position:relative;z-index:2;">
+        © 2026 Conect-R | Sacramento, CA | conect-r.com
+      </footer>
+    </section>
+
+  </main><!-- end .scroll-container -->
+
+  <!-- ============================================================
+       JAVASCRIPT
+  ============================================================ -->
+  <script>
+    /* =========================================================
+       TRANSLATIONS
+    ========================================================= */
+    const LANG = {
+      es: {
+        hero_headline: '¿Cuánto te está costando tu menú impreso?',
+        hero_sub: 'Descubre cómo un portal digital NFC puede transformar tu restaurante',
+        hero_scroll: 'Desliza para ver',
+        prob_title: 'El problema con los <span class="teal">menús físicos</span>',
+        prob_sub: 'Los números no mienten — cada día sin un portal digital te cuesta dinero real',
+        pain_1: 'Un restaurante mediano gasta $2,400–$4,800 al año solo en impresión',
+        pain_2: 'Rediseños + diseñador gráfico: hasta $10,000 anuales',
+        pain_3: '180+ horas al año sanitizando menús físicos',
+        pain_4: 'Menús desactualizados frustran al 86% de los clientes',
+        sol_title: 'Tu portal digital <span class="teal">Conect-R</span>',
+        sol_1: 'Menú digital interactivo con fotos y precios actualizables al instante',
+        sol_2: 'Enlace directo a reservaciones',
+        sol_3: 'Lista de espera digital',
+        sol_4: 'Stand NFC físico en tu mesa — solo acerca el teléfono y accede al portal',
+        comp_title: 'La diferencia que se ve... <span class="teal">y se antoja</span>',
+        comp_left_label: '▲ Menú tradicional',
+        comp_left_footer: 'Sin fotos. Sin descripción. Sin antojo.',
+        comp_right_label: '✦ Menú digital Conect-R',
+        dig_desc_1: 'Corte premium a las brasas, servido con guacamole fresco, pico de gallo y tortillas hechas a mano',
+        dig_desc_2: 'Tres enchiladas bañadas en salsa verde casera, crema, queso fresco y cebolla morada',
+        dig_desc_3: 'Camarones jumbo salteados en mantequilla, ajo dorado y un toque de limón',
+        order_btn: '🛒 Ordenar',
+        comp_right_footer: 'Con fotos. Con descripción. Con antojo garantizado.',
+        comp_stat: '📊 Los menús con fotos aumentan el ticket promedio hasta un <span class="gold">30%</span>',
+        mroi_title: 'Lo que te ahorra el <span class="teal">menú digital</span> al año',
+        mroi_1_title: 'Impresión eliminada',
+        mroi_1_body: 'Dejas de gastar entre $2,400 y $4,800 al año en reimpresiones, diseñadores y materiales',
+        mroi_2_title: '180+ horas recuperadas',
+        mroi_2_body: 'Tu equipo deja de sanitizar, organizar y reemplazar menús físicos. Ese tiempo vale dinero.',
+        mroi_2_num: 'Hasta $2,700/año en labor',
+        mroi_2_note: '(basado en $15/hr × 180 horas)',
+        mroi_3_title: 'Ticket promedio más alto',
+        mroi_3_body: 'Los menús con fotos y descripciones generan hasta 30% más por mesa. En un restaurante con $500K en ventas anuales eso son $150,000 adicionales.',
+        mroi_total: '💰 Beneficio económico estimado del menú digital: <strong>$7,500–$157,500 al año</strong> según el volumen de tu restaurante',
+        croi_title: 'Lo que te ahorra el <span class="teal">chatbot con IA</span> al año',
+        croi_intro: 'Tu portal incluye un asistente virtual inteligente disponible 24/7 que responde preguntas, toma reservaciones y guía a tus clientes — sin que tú ni tu equipo levanten el teléfono.',
+        croi_1_title: 'Llamadas reducidas',
+        croi_1_body: 'El chatbot responde automáticamente: horarios, dirección, menú, reservaciones, eventos y más. Un restaurante recibe entre 20 y 50 llamadas repetitivas por día.',
+        croi_1_sub: 'Ahorro estimado en tiempo de staff: 2–4 horas diarias',
+        croi_1_num: 'Hasta $21,900/año en labor',
+        croi_1_note: '(basado en $15/hr × 4 hrs × 365 días)',
+        croi_2_title: 'Atención fuera de horario',
+        croi_2_body: 'El chatbot trabaja cuando tu restaurante está cerrado. Captura clientes que de otra forma llamarían a la competencia.',
+        croi_2_sub: 'Reservaciones e información disponibles las 24 horas, los 7 días de la semana',
+        croi_3_title: 'Experiencia del cliente',
+        croi_3_body: 'Clientes que obtienen respuesta inmediata tienen 70% más probabilidad de regresar y dejar una reseña positiva.',
+        croi_3_sub: 'Más reseñas = más visibilidad en Google = más clientes nuevos',
+        croi_3_num: '+70% retención',
+        croi_total: '🤖 Beneficio económico estimado del chatbot IA: <strong>$15,000–$22,000 al año</strong> en tiempo de staff recuperado',
+        port_title: 'Lo que te genera el <span class="teal">portal completo</span> al año',
+        port_sub: 'Tu portal no es solo un menú — es tu presencia digital completa funcionando para ti las 24 horas.',
+        ben_1_title: 'Eventos y Catering',
+        ben_1_body: 'Promociona eventos directamente. Un evento de catering promedio genera $3,000–$8,000',
+        ben_2_title: 'Google Reviews',
+        ben_2_body: 'Más reseñas = más clientes nuevos. Cada estrella adicional en Google puede aumentar ingresos hasta un 9%',
+        ben_3_title: 'Quejas Internas',
+        ben_3_body: 'Corriges problemas antes de que se vuelvan reseñas negativas públicas. Una mala reseña cuesta en promedio $3,000 en clientes perdidos',
+        ben_4_title: 'Redes Sociales',
+        ben_4_body: 'Links directos a Instagram, Facebook, TikTok. Más seguidores = marketing gratuito',
+        ben_5_title: 'Sitio Web',
+        ben_5_body: 'Tráfico directo a tu página oficial desde cada escaneo NFC',
+        ben_6_title: 'Actualizaciones de Menú',
+        ben_6_body: '4 actualizaciones al mes — envíanos todos los cambios que necesites en un solo mensaje y los aplicamos el mismo día',
+        port_total: '🏆 Beneficio económico total estimado del portal: <strong>$25,000–$180,000 al año</strong>',
+        calc_title: '¿Cuánto puedes <span class="teal">ahorrar?</span>',
+        calc_slider_label: '¿Cuántas veces reimprimes tu menú al año?',
+        calc_times: ' veces',
+        calc_cost_label: 'Costo por reimpresión ($)',
+        calc_r1: '💸 Gastas actualmente en impresión',
+        calc_r2: '⏱️ Ahorro en labor (180 hrs × $15)',
+        calc_r3: '🤖 Ahorro estimado con chatbot IA',
+        calc_total: 'TOTAL AHORRADO AL AÑO',
+        calc_cost: '💳 Costo Conect-R ($200/mes)',
+        calc_net_label: 'Tu ganancia neta estimada',
+        calc_note: 'Cálculo conservador. Los beneficios reales pueden ser significativamente mayores.',
+        price_title: 'Oferta de <span class="teal">lanzamiento</span>',
+        price_badge: '⚡ Precio especial por tiempo limitado',
+        price_amount: '$200/mes',
+        price_original: '$450/mes',
+        pf_1: 'Portal digital interactivo personalizado',
+        pf_2: 'Menú digital con fotos y descripciones',
+        pf_3: 'Stand NFC físico para tus mesas',
+        pf_4: 'Chatbot con IA disponible 24/7',
+        pf_5: 'Google Reviews, redes sociales y enlaces de eventos',
+        pf_6: 'Sistema privado de quejas internas',
+        pf_7: '4 actualizaciones de menú al mes — envíanos todos los cambios que necesites en un solo mensaje y los aplicamos el mismo día',
+        pf_8: 'Soporte incluido',
+        price_value: 'Tú ahorras hasta $180,000 al año. Nosotros te cobramos $2,400.',
+        price_question: '¿Tiene sentido el negocio?',
+        cta_title: '¿Listo para modernizar tu restaurante?',
+        cta_sub: 'Conect-R te construye tu portal en días, no meses. Cupos limitados al precio de lanzamiento.',
+        cta_btn1: 'Agenda tu demo gratis',
+        cta_btn2: 'Ver ejemplo en vivo',
+        lang_btn: '🌐 EN',
+      },
+      en: {
+        hero_headline: 'How Much Is Your Printed Menu Costing You?',
+        hero_sub: 'Discover how an NFC digital portal can transform your restaurant',
+        hero_scroll: 'Scroll to explore',
+        prob_title: 'The Problem with <span class="teal">Printed Menus</span>',
+        prob_sub: 'The numbers don\'t lie — every day without a digital portal costs you real money',
+        pain_1: 'A mid-size restaurant spends $2,400–$4,800/year on printing alone',
+        pain_2: 'Redesigns + graphic designer: up to $10,000/year',
+        pain_3: '180+ hours/year sanitizing physical menus',
+        pain_4: 'Outdated menus frustrate 86% of customers',
+        sol_title: 'Your <span class="teal">Conect-R</span> Digital Portal',
+        sol_1: 'Interactive digital menu with instantly updatable photos and prices',
+        sol_2: 'Direct reservation link',
+        sol_3: 'Digital waitlist',
+        sol_4: 'Physical NFC stand on your table — just tap your phone to access the portal',
+        comp_title: 'The Difference You Can See... <span class="teal">and Crave</span>',
+        comp_left_label: '▲ Traditional Menu',
+        comp_left_footer: 'No photos. No description. No craving.',
+        comp_right_label: '✦ Conect-R Digital Menu',
+        dig_desc_1: 'Premium grilled cut, served with fresh guacamole, pico de gallo and handmade tortillas',
+        dig_desc_2: 'Three enchiladas bathed in homemade green salsa, cream, fresh cheese and red onion',
+        dig_desc_3: 'Jumbo shrimp sautéed in butter, golden garlic and a touch of lime',
+        order_btn: '🛒 Order',
+        comp_right_footer: 'With photos. With description. Craving guaranteed.',
+        comp_stat: '📊 Menus with photos increase the average ticket by up to <span class="gold">30%</span>',
+        mroi_title: 'What the <span class="teal">Digital Menu</span> Saves You Per Year',
+        mroi_1_title: 'Printing Eliminated',
+        mroi_1_body: 'Stop spending $2,400–$4,800/year on reprints, designers and materials',
+        mroi_2_title: '180+ Hours Recovered',
+        mroi_2_body: 'Your team stops sanitizing, organizing and replacing physical menus. That time is money.',
+        mroi_2_num: 'Up to $2,700/year in labor',
+        mroi_2_note: '(based on $15/hr × 180 hours)',
+        mroi_3_title: 'Higher Average Ticket',
+        mroi_3_body: 'Menus with photos and descriptions generate up to 30% more per table. In a restaurant with $500K annual sales that\'s $150,000 extra.',
+        mroi_total: '💰 Estimated economic benefit of the digital menu: <strong>$7,500–$157,500/year</strong> depending on your restaurant\'s volume',
+        croi_title: 'What the <span class="teal">AI Chatbot</span> Saves You Per Year',
+        croi_intro: 'Your portal includes a smart virtual assistant available 24/7 that answers questions, takes reservations and guides your customers — without you or your team picking up the phone.',
+        croi_1_title: 'Reduced Calls',
+        croi_1_body: 'The chatbot automatically answers: hours, address, menu, reservations, events and more. A restaurant receives 20–50 repetitive calls per day.',
+        croi_1_sub: 'Estimated staff time saved: 2–4 hours daily',
+        croi_1_num: 'Up to $21,900/year in labor',
+        croi_1_note: '(based on $15/hr × 4 hrs × 365 days)',
+        croi_2_title: 'After-Hours Service',
+        croi_2_body: 'The chatbot works when your restaurant is closed. It captures customers who would otherwise call the competition.',
+        croi_2_sub: 'Reservations and information available 24 hours, 7 days a week',
+        croi_3_title: 'Customer Experience',
+        croi_3_body: 'Customers who get an immediate response are 70% more likely to return and leave a positive review.',
+        croi_3_sub: 'More reviews = more Google visibility = more new customers',
+        croi_3_num: '+70% retention',
+        croi_total: '🤖 Estimated economic benefit of AI chatbot: <strong>$15,000–$22,000/year</strong> in recovered staff time',
+        port_title: 'What the <span class="teal">Full Portal</span> Generates Per Year',
+        port_sub: "Your portal isn't just a menu — it's your complete digital presence working for you 24 hours a day.",
+        ben_1_title: 'Events & Catering',
+        ben_1_body: 'Promote events directly. An average catering event generates $3,000–$8,000',
+        ben_2_title: 'Google Reviews',
+        ben_2_body: 'More reviews = more new customers. Each additional Google star can increase revenue up to 9%',
+        ben_3_title: 'Internal Complaints',
+        ben_3_body: 'Fix problems before they become public negative reviews. One bad review costs an average of $3,000 in lost customers',
+        ben_4_title: 'Social Media',
+        ben_4_body: 'Direct links to Instagram, Facebook, TikTok. More followers = free marketing',
+        ben_5_title: 'Website',
+        ben_5_body: 'Direct traffic to your official page from every NFC scan',
+        ben_6_title: 'Menu Updates',
+        ben_6_body: '4 updates per month — send us all the changes you need in one message and we apply them same day',
+        port_total: '🏆 Estimated total economic benefit of the portal: <strong>$25,000–$180,000/year</strong>',
+        calc_title: 'How Much Can You <span class="teal">Save?</span>',
+        calc_slider_label: 'How many times do you reprint your menu per year?',
+        calc_times: ' times',
+        calc_cost_label: 'Cost per reprint ($)',
+        calc_r1: '💸 You currently spend on printing',
+        calc_r2: '⏱️ Labor savings (180 hrs × $15)',
+        calc_r3: '🤖 Estimated savings with AI chatbot',
+        calc_total: 'TOTAL SAVED PER YEAR',
+        calc_cost: '💳 Conect-R cost ($200/month)',
+        calc_net_label: 'Your estimated net gain',
+        calc_note: 'Conservative estimate. Real benefits may be significantly higher.',
+        price_title: 'Launch <span class="teal">Promotion</span>',
+        price_badge: '⚡ Limited time special price',
+        price_amount: '$200/mo',
+        price_original: '$450/mo',
+        pf_1: 'Custom interactive digital portal',
+        pf_2: 'Digital menu with photos and descriptions',
+        pf_3: 'Physical NFC stand for your tables',
+        pf_4: 'AI chatbot available 24/7',
+        pf_5: 'Google Reviews, social media and event links',
+        pf_6: 'Private internal complaints system',
+        pf_7: '4 menu updates per month — send us all the changes you need in one message and we apply them same day',
+        pf_8: 'Support included',
+        price_value: 'You save up to $180,000/year. We charge you $2,400.',
+        price_question: 'Does the math make sense?',
+        cta_title: 'Ready to modernize your restaurant?',
+        cta_sub: 'Conect-R builds your portal in days, not months. Limited spots at launch pricing.',
+        cta_btn1: 'Schedule Your Free Demo',
+        cta_btn2: 'See a Live Example',
+        lang_btn: '🌐 ES',
+      }
+    };
+
+    let currentLang = 'es';
+
+    function toggleLang() {
+      currentLang = currentLang === 'es' ? 'en' : 'es';
+      applyLang();
+    }
+
+    function applyLang() {
+      const t = LANG[currentLang];
+      document.getElementById('lang-toggle').textContent = t.lang_btn;
+
+      document.querySelectorAll('[data-key]').forEach(el => {
+        const key = el.getAttribute('data-key');
+        if (t[key] !== undefined) {
+          el.innerHTML = t[key];
+        }
+      });
+    }
+
+    /* =========================================================
+       SAVINGS CALCULATOR
+    ========================================================= */
+    function fmtCurrency(n) {
+      return '$' + Math.round(n).toLocaleString('en-US');
+    }
+
+    function updateCalc() {
+      const reprints = parseInt(document.getElementById('reprint-slider').value, 10);
+      const costPerReprint = parseFloat(document.getElementById('cost-input').value) || 0;
+
+      document.getElementById('reprint-val').textContent = reprints;
+
+      const printSpend = reprints * costPerReprint;
+      const laborSavings = 2700;
+      const chatbotSavings = 21900;
+      const totalSavings = printSpend + laborSavings + chatbotSavings;
+      const conect_r_cost = 2400;
+      const netGain = totalSavings - conect_r_cost;
+
+      document.getElementById('r-print').textContent = fmtCurrency(printSpend) + '/año';
+      document.getElementById('r-total').textContent = fmtCurrency(totalSavings);
+      animateNumber('net-gain', netGain);
+    }
+
+    // Smooth number counting animation
+    function animateNumber(id, target) {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      const start = parseInt(el.getAttribute('data-current') || '0', 10);
+      const duration = 600;
+      const startTime = performance.now();
+
+      function tick(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+        const current = Math.round(start + (target - start) * eased);
+        el.textContent = fmtCurrency(current);
+        if (progress < 1) requestAnimationFrame(tick);
+        else el.setAttribute('data-current', target);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    /* =========================================================
+       PARTICLE CANVAS
+    ========================================================= */
+    (function initParticles() {
+      const canvas = document.getElementById('particle-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      function resize() {
+        canvas.width = canvas.parentElement.offsetWidth;
+        canvas.height = canvas.parentElement.offsetHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      const COUNT = 60;
+      const particles = Array.from({ length: COUNT }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.8 + 0.4,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        alpha: Math.random() * 0.5 + 0.1,
+        color: Math.random() > 0.6 ? '#00C9A7' : '#D4AF37',
+      }));
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = p.alpha;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if (p.x < 0) p.x = canvas.width;
+          if (p.x > canvas.width) p.x = 0;
+          if (p.y < 0) p.y = canvas.height;
+          if (p.y > canvas.height) p.y = 0;
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+
+    /* =========================================================
+       INTERSECTION OBSERVER — ENTRANCE ANIMATIONS
+    ========================================================= */
+    const animObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.animate-in').forEach(el => animObserver.observe(el));
+
+    /* =========================================================
+       NAV DOTS + ACTIVE SLIDE TRACKING
+    ========================================================= */
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const dots = Array.from(document.querySelectorAll('.nav-dot'));
+
+    const slideObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+          const idx = slides.indexOf(entry.target);
+          dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+        }
+      });
+    }, { threshold: 0.5 });
+
+    slides.forEach(s => slideObserver.observe(s));
+
+    function goToSlide(index) {
+      slides[index].scrollIntoView({ behavior: 'smooth' });
+    }
+
+    /* =========================================================
+       KEYBOARD NAVIGATION
+    ========================================================= */
+    document.addEventListener('keydown', (e) => {
+      const container = document.getElementById('scroll-container');
+      const currentIdx = dots.findIndex(d => d.classList.contains('active'));
+      if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+        e.preventDefault();
+        const next = Math.min(currentIdx + 1, slides.length - 1);
+        goToSlide(next);
+      } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+        e.preventDefault();
+        const prev = Math.max(currentIdx - 1, 0);
+        goToSlide(prev);
+      }
+    });
+
+    /* =========================================================
+       INIT
+    ========================================================= */
+    updateCalc();
+  </script>
+</body>
+</html>
