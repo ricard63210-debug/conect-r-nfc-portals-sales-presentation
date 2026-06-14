@@ -599,6 +599,161 @@
       margin-top: 8px;
     }
 
+    /* iPhone mockup for comparison slide */
+    .iphone-mockup {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+    .iphone-frame {
+      position: relative;
+      width: 260px;
+      height: 520px;
+      background: linear-gradient(160deg, #1c1c1e 0%, #2c2c2e 100%);
+      border-radius: 44px;
+      border: 8px solid #3a3a3c;
+      box-shadow:
+        0 0 0 1px #555,
+        0 0 40px rgba(0,201,167,0.3),
+        0 20px 60px rgba(0,0,0,0.6),
+        inset 0 0 0 1px rgba(255,255,255,0.08);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .iphone-notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 28px;
+      background: #1c1c1e;
+      border-radius: 0 0 18px 18px;
+      z-index: 10;
+    }
+    .iphone-notch::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #2c2c2e;
+      box-shadow: inset 0 0 3px rgba(0,0,0,0.5);
+    }
+    .iphone-screen {
+      position: absolute;
+      inset: 0;
+      border-radius: 36px;
+      overflow: hidden;
+      background: #000;
+    }
+    .iphone-screen iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+    .iphone-home-bar {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 4px;
+      z-index: 10;
+    }
+    .iphone-caption {
+      margin-top: 10px;
+      font-size: 0.72rem;
+      color: var(--teal);
+      text-align: center;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .iphone-side-btn {
+      position: absolute;
+      right: -11px;
+      top: 100px;
+      width: 3px;
+      height: 60px;
+      background: #3a3a3c;
+      border-radius: 2px;
+    }
+    .iphone-vol-up {
+      position: absolute;
+      left: -11px;
+      top: 90px;
+      width: 3px;
+      height: 36px;
+      background: #3a3a3c;
+      border-radius: 2px;
+    }
+    .iphone-vol-down {
+      position: absolute;
+      left: -11px;
+      top: 136px;
+      width: 3px;
+      height: 36px;
+      background: #3a3a3c;
+      border-radius: 2px;
+    }
+
+    /* NFC Stands pricing table */
+    .nfc-table-wrap {
+      margin: 16px 0 20px;
+    }
+    .nfc-table-title {
+      font-family: var(--font-heading);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--teal);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nfc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.83rem;
+    }
+    .nfc-table thead th {
+      background: rgba(0,201,167,0.12);
+      color: var(--teal);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      padding: 8px 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(0,201,167,0.3);
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .nfc-table tbody td {
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: var(--gray-light);
+    }
+    .nfc-table tbody td.price-col {
+      color: var(--gold);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .nfc-table-note {
+      font-size: 0.72rem;
+      color: var(--gray);
+      font-style: italic;
+      margin-top: 6px;
+    }
+
     .comparison-stat {
       text-align: center;
       font-family: var(--font-heading);
@@ -1231,47 +1386,28 @@
           <p class="menu-trad-footer" data-key="comp_left_footer">Sin fotos. Sin descripción. Sin antojo.</p>
         </div>
 
-        <!-- RIGHT: Digital -->
-        <div class="menu-digital">
-          <span class="menu-dig-label" data-key="comp_right_label">✦ Menú digital Conect-R</span>
-
-          <div class="menu-dig-item">
-            <div class="food-photo food-photo-1"></div>
-            <div class="menu-dig-info">
-              <div class="menu-dig-name">Carne Asada</div>
-              <div class="menu-dig-desc" data-key="dig_desc_1">Corte premium a las brasas, servido con guacamole fresco, pico de gallo y tortillas hechas a mano</div>
-              <div class="menu-dig-footer">
-                <span class="menu-dig-price">$16</span>
-                <button class="order-btn" data-key="order_btn">🛒 Ordenar</button>
+        <!-- RIGHT: iPhone mockup with live menu iframe -->
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <span class="menu-dig-label" data-key="comp_right_label" style="margin-bottom:12px;">✦ Menú digital Conect-R</span>
+          <div class="iphone-mockup">
+            <div class="iphone-frame">
+              <div class="iphone-notch"></div>
+              <div class="iphone-vol-up"></div>
+              <div class="iphone-vol-down"></div>
+              <div class="iphone-side-btn"></div>
+              <div class="iphone-screen">
+                <iframe
+                  src="https://maya-cantina-portal.vercel.app/menu"
+                  title="Maya Cantina Digital Menu"
+                  loading="lazy"
+                  scrolling="yes"
+                  allow="autoplay"
+                ></iframe>
               </div>
+              <div class="iphone-home-bar"></div>
             </div>
+            <p class="iphone-caption" data-key="comp_right_footer">Con fotos. Con descripción. Con antojo garantizado.</p>
           </div>
-
-          <div class="menu-dig-item">
-            <div class="food-photo food-photo-2"></div>
-            <div class="menu-dig-info">
-              <div class="menu-dig-name">Enchiladas Verdes</div>
-              <div class="menu-dig-desc" data-key="dig_desc_2">Tres enchiladas bañadas en salsa verde casera, crema, queso fresco y cebolla morada</div>
-              <div class="menu-dig-footer">
-                <span class="menu-dig-price">$13</span>
-                <button class="order-btn" data-key="order_btn">🛒 Ordenar</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="menu-dig-item">
-            <div class="food-photo food-photo-3"></div>
-            <div class="menu-dig-info">
-              <div class="menu-dig-name">Camarones al Mojo de Ajo</div>
-              <div class="menu-dig-desc" data-key="dig_desc_3">Camarones jumbo salteados en mantequilla, ajo dorado y un toque de limón</div>
-              <div class="menu-dig-footer">
-                <span class="menu-dig-price">$18</span>
-                <button class="order-btn" data-key="order_btn">🛒 Ordenar</button>
-              </div>
-            </div>
-          </div>
-
-          <p class="menu-dig-caption" data-key="comp_right_footer">Con fotos. Con descripción. Con antojo garantizado.</p>
         </div>
       </div>
 
@@ -1396,7 +1532,7 @@
         <div class="card benefit-card animate-in delay-6">
           <div class="benefit-icon">🔄</div>
           <h4 data-key="ben_6_title">Actualizaciones de Menú</h4>
-          <p data-key="ben_6_body">Cambia precios, platillos y promociones en minutos, sin costo extra</p>
+          <p data-key="ben_6_body">4 actualizaciones al mes — envíanos en un solo mensaje todos los cambios que necesites y los aplicamos en un marco de 48 horas</p>
         </div>
       </div>
 
@@ -1486,13 +1622,42 @@
         <ul class="pricing-features">
           <li><span>✅</span><span data-key="pf_1">Portal digital interactivo personalizado</span></li>
           <li><span>✅</span><span data-key="pf_2">Menú digital con fotos y descripciones</span></li>
-          <li><span>✅</span><span data-key="pf_3">Stand NFC físico para tus mesas</span></li>
           <li><span>✅</span><span data-key="pf_4">Chatbot con IA disponible 24/7</span></li>
           <li><span>✅</span><span data-key="pf_5">Google Reviews, redes sociales y enlaces de eventos</span></li>
           <li><span>✅</span><span data-key="pf_6">Sistema privado de quejas internas</span></li>
-          <li><span>✅</span><span data-key="pf_7">4 actualizaciones de menú al mes — envíanos todos los cambios que necesites en un solo mensaje y los aplicamos el mismo día</span></li>
+          <li><span>✅</span><span data-key="pf_7">4 actualizaciones de menú al mes — envíanos en un solo mensaje todos los cambios que necesites y los aplicamos en un marco de 48 horas</span></li>
           <li><span>✅</span><span data-key="pf_8">Soporte incluido</span></li>
         </ul>
+
+        <hr class="pricing-divider" />
+
+        <!-- NFC Stands Pricing Table -->
+        <div class="nfc-table-wrap">
+          <div class="nfc-table-title">📡 <span data-key="nfc_table_title">Stands NFC físicos</span></div>
+          <table class="nfc-table">
+            <thead>
+              <tr>
+                <th data-key="nfc_col_qty">Cantidad</th>
+                <th data-key="nfc_col_price">Precio por unidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-key="nfc_tier_1">1–49 stands</td>
+                <td class="price-col">$20 c/u</td>
+              </tr>
+              <tr>
+                <td data-key="nfc_tier_2">50–99 stands</td>
+                <td class="price-col">$15 c/u</td>
+              </tr>
+              <tr>
+                <td data-key="nfc_tier_3">100+ stands</td>
+                <td class="price-col">$10 c/u</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="nfc-table-note" data-key="nfc_note">Los stands NFC se adquieren por separado</p>
+        </div>
 
         <hr class="pricing-divider" />
 
@@ -1604,7 +1769,7 @@
         ben_5_title: 'Sitio Web',
         ben_5_body: 'Tráfico directo a tu página oficial desde cada escaneo NFC',
         ben_6_title: 'Actualizaciones de Menú',
-        ben_6_body: '4 actualizaciones al mes — envíanos todos los cambios que necesites en un solo mensaje y los aplicamos el mismo día',
+        ben_6_body: '4 actualizaciones al mes — envíanos en un solo mensaje todos los cambios que necesites y los aplicamos en un marco de 48 horas',
         port_total: '🏆 Beneficio económico total estimado del portal: <strong>$25,000–$180,000 al año</strong>',
         calc_title: '¿Cuánto puedes <span class="teal">ahorrar?</span>',
         calc_slider_label: '¿Cuántas veces reimprimes tu menú al año?',
@@ -1623,12 +1788,18 @@
         price_original: '$450/mes',
         pf_1: 'Portal digital interactivo personalizado',
         pf_2: 'Menú digital con fotos y descripciones',
-        pf_3: 'Stand NFC físico para tus mesas',
         pf_4: 'Chatbot con IA disponible 24/7',
         pf_5: 'Google Reviews, redes sociales y enlaces de eventos',
         pf_6: 'Sistema privado de quejas internas',
-        pf_7: '4 actualizaciones de menú al mes — envíanos todos los cambios que necesites en un solo mensaje y los aplicamos el mismo día',
+        pf_7: '4 actualizaciones de menú al mes — envíanos en un solo mensaje todos los cambios que necesites y los aplicamos en un marco de 48 horas',
         pf_8: 'Soporte incluido',
+        nfc_table_title: 'Stands NFC físicos',
+        nfc_col_qty: 'Cantidad',
+        nfc_col_price: 'Precio por unidad',
+        nfc_tier_1: '1–49 stands',
+        nfc_tier_2: '50–99 stands',
+        nfc_tier_3: '100+ stands',
+        nfc_note: 'Los stands NFC se adquieren por separado',
         price_value: 'Tú ahorras hasta $180,000 al año. Nosotros te cobramos $2,400.',
         price_question: '¿Tiene sentido el negocio?',
         cta_title: '¿Listo para modernizar tu restaurante?',
@@ -1700,7 +1871,7 @@
         ben_5_title: 'Website',
         ben_5_body: 'Direct traffic to your official page from every NFC scan',
         ben_6_title: 'Menu Updates',
-        ben_6_body: '4 updates per month — send us all the changes you need in one message and we apply them same day',
+        ben_6_body: '4 updates per month — send us all the changes you need in one message and we apply them within 48 hours',
         port_total: '🏆 Estimated total economic benefit of the portal: <strong>$25,000–$180,000/year</strong>',
         calc_title: 'How Much Can You <span class="teal">Save?</span>',
         calc_slider_label: 'How many times do you reprint your menu per year?',
@@ -1719,12 +1890,18 @@
         price_original: '$450/mo',
         pf_1: 'Custom interactive digital portal',
         pf_2: 'Digital menu with photos and descriptions',
-        pf_3: 'Physical NFC stand for your tables',
         pf_4: 'AI chatbot available 24/7',
         pf_5: 'Google Reviews, social media and event links',
         pf_6: 'Private internal complaints system',
-        pf_7: '4 menu updates per month — send us all the changes you need in one message and we apply them same day',
+        pf_7: '4 menu updates per month — send us all the changes you need in one message and we apply them within 48 hours',
         pf_8: 'Support included',
+        nfc_table_title: 'Physical NFC Stands',
+        nfc_col_qty: 'Quantity',
+        nfc_col_price: 'Price per unit',
+        nfc_tier_1: '1–49 stands',
+        nfc_tier_2: '50–99 stands',
+        nfc_tier_3: '100+ stands',
+        nfc_note: 'NFC stands are purchased separately',
         price_value: 'You save up to $180,000/year. We charge you $2,400.',
         price_question: 'Does the math make sense?',
         cta_title: 'Ready to modernize your restaurant?',
