@@ -72,13 +72,19 @@
     }
 
     /* ============================================================
-       LANGUAGE TOGGLE
-    ============================================================ */
-    #lang-toggle {
+       TOP ACTIONS HEADER
+     ============================================================ */
+    .top-actions {
       position: fixed;
       top: 20px;
       right: 20px;
       z-index: 9999;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    #lang-toggle {
       background: var(--teal);
       color: var(--navy);
       border: none;
@@ -96,6 +102,59 @@
       background: #00e8c0;
       transform: translateY(-2px);
       box-shadow: 0 6px 28px var(--teal-glow);
+    }
+
+    #share-btn {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--white);
+      border: 1px solid var(--card-border);
+      border-radius: 50px;
+      padding: 10px 20px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(8px);
+    }
+    #share-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--teal);
+      box-shadow: 0 4px 20px var(--teal-glow);
+      transform: translateY(-2px);
+    }
+
+    /* Share Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translate(-50%, 50px);
+      background: rgba(17, 24, 39, 0.95);
+      border: 1px solid var(--teal);
+      color: var(--white);
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 0.9rem;
+      z-index: 10000;
+      box-shadow: 0 10px 30px rgba(0, 201, 167, 0.25);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(8px);
+    }
+    .toast.show {
+      transform: translate(-50%, 0);
+      opacity: 1;
     }
 
     /* ============================================================
@@ -1174,6 +1233,16 @@
       #nav-dots { display: none; }
 
       .pricing-card { padding: 28px 20px; }
+
+      .top-actions {
+        top: 12px;
+        right: 12px;
+        gap: 8px;
+      }
+      #share-btn, #lang-toggle {
+        padding: 8px 14px;
+        font-size: 0.78rem;
+      }
     }
 
     @media (max-width: 480px) {
@@ -1181,6 +1250,16 @@
       .hero-headline { font-size: 1.9rem; }
       .roi-grid { grid-template-columns: 1fr; }
       .benefits-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 400px) {
+      .share-btn-text {
+        display: none;
+      }
+      #share-btn {
+        padding: 8px;
+        border-radius: 50%;
+      }
     }
 
     /* Scrollbar styling for inner scrollable grids */
@@ -1207,8 +1286,23 @@
 </head>
 <body>
 
-  <!-- Language Toggle -->
-  <button id="lang-toggle" onclick="toggleLang()" aria-label="Toggle language">🌐 EN</button>
+  <!-- Top Actions Header -->
+  <div class="top-actions">
+    <button id="share-btn" onclick="sharePage()" aria-label="Share presentation">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="18" cy="5" r="3"></circle>
+        <circle cx="6" cy="12" r="3"></circle>
+        <circle cx="18" cy="19" r="3"></circle>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+      </svg>
+      <span class="share-btn-text" data-key="share_btn_text">Compartir</span>
+    </button>
+    <button id="lang-toggle" onclick="toggleLang()" aria-label="Toggle language">🌐 EN</button>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast" role="alert" aria-live="polite"></div>
 
   <!-- Navigation Dots -->
   <nav id="nav-dots" aria-label="Slide navigation">
@@ -1807,6 +1901,7 @@
         cta_btn1: 'Agenda tu demo gratis',
         cta_btn2: 'Ver ejemplo en vivo',
         lang_btn: '🌐 EN',
+        share_btn_text: 'Compartir',
       },
       en: {
         hero_headline: 'How Much Is Your Printed Menu Costing You?',
@@ -1909,6 +2004,7 @@
         cta_btn1: 'Schedule Your Free Demo',
         cta_btn2: 'See a Live Example',
         lang_btn: '🌐 ES',
+        share_btn_text: 'Share',
       }
     };
 
@@ -2076,6 +2172,40 @@
         goToSlide(prev);
       }
     });
+
+    /* =========================================================
+       SHARE PAGE FUNCTIONALITY
+    ========================================================= */
+    function sharePage() {
+      const shareData = {
+        title: document.title,
+        text: currentLang === 'es'
+          ? 'Descubre cómo Conect-R transforma tu restaurante con un portal digital NFC interactivo.'
+          : 'Discover how Conect-R transforms your restaurant with an interactive NFC digital portal.',
+        url: window.location.href
+      };
+
+      if (navigator.share) {
+        navigator.share(shareData)
+          .catch((error) => console.log('Error sharing:', error));
+      } else {
+        // Fallback: Copy link to clipboard
+        navigator.clipboard.writeText(shareData.url).then(() => {
+          showToast(currentLang === 'es' ? '¡Enlace copiado al portapapeles! 📋' : 'Link copied to clipboard! 📋');
+        }).catch((err) => {
+          console.error('Could not copy text: ', err);
+        });
+      }
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
 
     /* =========================================================
        INIT
