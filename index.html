@@ -1342,7 +1342,16 @@
         Descubre cómo un portal digital NFC puede transformar tu restaurante
       </p>
 
-      <div class="hero-scroll-hint animate-in delay-3" data-key="hero_scroll">
+      <div class="cta-buttons animate-in delay-3" style="position:relative;z-index:2; margin-top: 1rem; margin-bottom: 2rem;">
+        <a href="sms:+19168120873&body=Hola%20Ricardo%2C%20me%20interesa%20agendar%20una%20demo%20de%20Conect-R%20para%20mi%20restaurante." class="btn-primary sms-cta" id="hero-btn-primary" data-key="cta_btn1">
+          Agenda tu demo gratis
+        </a>
+        <a href="https://maya-cantina-portal.vercel.app" class="btn-secondary" target="_blank" rel="noopener noreferrer" id="hero-btn-secondary" data-key="cta_btn2">
+          Ver ejemplo en vivo
+        </a>
+      </div>
+
+      <div class="hero-scroll-hint animate-in delay-4" data-key="hero_scroll">
         Desliza para ver
       </div>
     </section>
@@ -1777,7 +1786,7 @@
       </p>
 
       <div class="cta-buttons animate-in delay-2" style="position:relative;z-index:2;">
-        <a href="https://ricardo-orozco.conect-r.com" class="btn-primary" target="_blank" rel="noopener noreferrer" id="cta-btn-primary" data-key="cta_btn1">
+        <a href="sms:+19168120873&body=Hola%20Ricardo%2C%20me%20interesa%20agendar%20una%20demo%20de%20Conect-R%20para%20mi%20restaurante." class="btn-primary sms-cta" id="cta-btn-primary" data-key="cta_btn1">
           Agenda tu demo gratis
         </a>
         <a href="https://maya-cantina-portal.vercel.app" class="btn-secondary" target="_blank" rel="noopener noreferrer" id="cta-btn-secondary" data-key="cta_btn2">
@@ -2024,6 +2033,15 @@
         if (t[key] !== undefined) {
           el.innerHTML = t[key];
         }
+      });
+
+      // Update SMS CTA button links based on language
+      const smsHref = currentLang === 'es'
+        ? 'sms:+19168120873&body=Hola%20Ricardo%2C%20me%20interesa%20agendar%20una%20demo%20de%20Conect-R%20para%20mi%20restaurante.'
+        : 'sms:+19168120873&body=Hi%20Ricardo%2C%20I%27m%20interested%20in%20scheduling%20a%20Conect-R%20demo%20for%20my%20restaurant.';
+      
+      document.querySelectorAll('.sms-cta').forEach(btn => {
+        btn.setAttribute('href', smsHref);
       });
     }
 
