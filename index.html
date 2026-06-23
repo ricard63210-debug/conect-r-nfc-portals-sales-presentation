@@ -7,27 +7,29 @@
   <meta name="description" content="Descubre cómo Conect-R transforma tu restaurante con un portal digital NFC interactivo. Ahorra miles de dólares al año y moderniza tu negocio desde $200/mes." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet" />
 
   <style>
     /* ============================================================
        DESIGN TOKENS
     ============================================================ */
     :root {
-      --navy: #0A0F1E;
-      --navy-mid: #111827;
-      --navy-light: #1a2236;
-      --teal: #00C9A7;
-      --teal-dim: rgba(0, 201, 167, 0.15);
-      --teal-glow: rgba(0, 201, 167, 0.4);
-      --gold: #D4AF37;
-      --gold-dim: rgba(212, 175, 55, 0.15);
+      --navy: #0a0c10;
+      --navy-mid: #08090c;
+      --navy-light: #0e1117;
+      --teal: #fe6e1a;
+      --teal-rgb: 254, 110, 26;
+      --teal-dim: rgba(254, 110, 26, 0.15);
+      --teal-glow: rgba(254, 110, 26, 0.4);
+      --gold: #51a2ff;
+      --gold-rgb: 81, 162, 255;
+      --gold-dim: rgba(81, 162, 255, 0.15);
       --white: #ffffff;
       --gray: #8892a4;
       --gray-light: #c4cdd8;
       --card-bg: rgba(255, 255, 255, 0.04);
       --card-border: rgba(255, 255, 255, 0.08);
-      --font-heading: 'Space Grotesk', sans-serif;
+      --font-heading: 'Playfair Display', serif;
       --font-body: 'Inter', sans-serif;
     }
 
@@ -143,7 +145,7 @@
       font-weight: 500;
       font-size: 0.9rem;
       z-index: 10000;
-      box-shadow: 0 10px 30px rgba(0, 201, 167, 0.25);
+      box-shadow: 0 10px 30px rgba(var(--teal-rgb), 0.25);
       opacity: 0;
       pointer-events: none;
       transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
@@ -218,14 +220,14 @@
     }
     .card:hover {
       border-color: var(--teal);
-      box-shadow: 0 0 28px var(--teal-glow), inset 0 0 20px rgba(0,201,167,0.04);
+      box-shadow: 0 0 28px var(--teal-glow), inset 0 0 20px rgba(var(--teal-rgb), 0.04);
       transform: translateY(-4px);
     }
 
     /* Total bar */
     .total-bar {
-      background: linear-gradient(135deg, rgba(0,201,167,0.15), rgba(0,201,167,0.08));
-      border: 1px solid rgba(0,201,167,0.3);
+      background: linear-gradient(135deg, rgba(var(--teal-rgb), 0.15), rgba(var(--teal-rgb), 0.08));
+      border: 1px solid rgba(var(--teal-rgb), 0.3);
       border-radius: 12px;
       padding: 18px 28px;
       text-align: center;
@@ -277,13 +279,13 @@
     }
     .orb-1 {
       width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(0,201,167,0.12) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(var(--teal-rgb), 0.12) 0%, transparent 70%);
       top: -100px; left: -100px;
       animation: orb-float 8s ease-in-out infinite;
     }
     .orb-2 {
       width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(var(--gold-rgb), 0.08) 0%, transparent 70%);
       bottom: -80px; right: -80px;
       animation: orb-float 10s ease-in-out infinite reverse;
     }
@@ -293,17 +295,48 @@
     }
 
     .hero-logo {
-      font-family: var(--font-heading);
-      font-size: clamp(1.4rem, 3vw, 1.8rem);
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      color: var(--teal);
       margin-bottom: 2.5rem;
-      text-shadow: 0 0 30px var(--teal-glow);
       position: relative;
       z-index: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-    .hero-logo span { color: var(--white); }
+    .hero-logo img {
+      height: clamp(50px, 8vw, 75px);
+      object-fit: contain;
+      mix-blend-mode: multiply;
+    }
+    
+    /* Fixed Top-Left Logo */
+    .fixed-logo {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 9999;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      transition: all 0.3s ease, opacity 0.4s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .fixed-logo img {
+      height: 100%;
+      object-fit: contain;
+      mix-blend-mode: multiply;
+    }
+    .fixed-logo:hover {
+      transform: scale(1.05);
+    }
+    
+    @media (max-width: 768px) {
+      .fixed-logo {
+        top: 12px;
+        left: 12px;
+        height: 32px;
+      }
+    }
 
     .hero-headline {
       font-family: var(--font-heading);
@@ -411,8 +444,8 @@
       height: 320px;
       background: linear-gradient(160deg, #1a2236 0%, #0d1526 100%);
       border-radius: 30px;
-      border: 2px solid rgba(0,201,167,0.4);
-      box-shadow: 0 0 40px rgba(0,201,167,0.25), 0 0 80px rgba(0,201,167,0.1);
+      border: 2px solid rgba(var(--teal-rgb), 0.4);
+      box-shadow: 0 0 40px rgba(var(--teal-rgb), 0.25), 0 0 80px rgba(var(--teal-rgb), 0.1);
       position: relative;
       display: flex;
       flex-direction: column;
@@ -421,8 +454,8 @@
       animation: phone-pulse 3s ease-in-out infinite;
     }
     @keyframes phone-pulse {
-      0%, 100% { box-shadow: 0 0 40px rgba(0,201,167,0.25), 0 0 80px rgba(0,201,167,0.1); }
-      50% { box-shadow: 0 0 60px rgba(0,201,167,0.45), 0 0 100px rgba(0,201,167,0.2); }
+      0%, 100% { box-shadow: 0 0 40px rgba(var(--teal-rgb), 0.25), 0 0 80px rgba(var(--teal-rgb), 0.1); }
+      50% { box-shadow: 0 0 60px rgba(var(--teal-rgb), 0.45), 0 0 100px rgba(var(--teal-rgb), 0.2); }
     }
     .phone-notch {
       width: 60px; height: 10px;
@@ -439,8 +472,8 @@
     }
     .phone-menu-item {
       width: 100%;
-      background: rgba(0,201,167,0.08);
-      border: 1px solid rgba(0,201,167,0.2);
+      background: rgba(var(--teal-rgb), 0.08);
+      border: 1px solid rgba(var(--teal-rgb), 0.2);
       border-radius: 8px;
       padding: 7px 10px;
       margin-bottom: 7px;
@@ -570,10 +603,10 @@
     /* RIGHT — Digital */
     .menu-digital {
       background: linear-gradient(160deg, #0d1a2e 0%, #0a1520 100%);
-      border: 1px solid rgba(0,201,167,0.3);
+      border: 1px solid rgba(var(--teal-rgb), 0.3);
       border-radius: 12px;
       padding: 20px;
-      box-shadow: 0 0 40px rgba(0,201,167,0.15);
+      box-shadow: 0 0 40px rgba(var(--teal-rgb), 0.15);
       position: relative;
       overflow: hidden;
     }
@@ -604,8 +637,8 @@
       transition: all 0.3s ease;
     }
     .menu-dig-item:hover {
-      border-color: rgba(0,201,167,0.3);
-      background: rgba(0,201,167,0.05);
+      border-color: rgba(var(--teal-rgb), 0.3);
+      background: rgba(var(--teal-rgb), 0.05);
     }
     .food-photo {
       width: 64px;
@@ -675,7 +708,7 @@
       border: 8px solid #3a3a3c;
       box-shadow:
         0 0 0 1px #555,
-        0 0 40px rgba(0,201,167,0.3),
+        0 0 40px rgba(var(--teal-rgb), 0.3),
         0 20px 60px rgba(0,0,0,0.6),
         inset 0 0 0 1px rgba(255,255,255,0.08);
       overflow: hidden;
@@ -784,13 +817,13 @@
       font-size: 0.83rem;
     }
     .nfc-table thead th {
-      background: rgba(0,201,167,0.12);
+      background: rgba(var(--teal-rgb), 0.12);
       color: var(--teal);
       font-family: var(--font-heading);
       font-weight: 700;
       padding: 8px 12px;
       text-align: left;
-      border-bottom: 1px solid rgba(0,201,167,0.3);
+      border-bottom: 1px solid rgba(var(--teal-rgb), 0.3);
       font-size: 0.78rem;
       letter-spacing: 0.04em;
       text-transform: uppercase;
@@ -819,8 +852,8 @@
       font-size: clamp(1rem, 2.5vw, 1.3rem);
       font-weight: 700;
       color: var(--teal);
-      background: rgba(0,201,167,0.08);
-      border: 1px solid rgba(0,201,167,0.2);
+      background: rgba(var(--teal-rgb), 0.08);
+      border: 1px solid rgba(var(--teal-rgb), 0.2);
       border-radius: 12px;
       padding: 14px 28px;
       width: 100%;
@@ -944,7 +977,7 @@
       -webkit-appearance: none;
       appearance: none;
       height: 6px;
-      background: rgba(0,201,167,0.2);
+      background: rgba(var(--teal-rgb), 0.2);
       border-radius: 6px;
       outline: none;
       cursor: pointer;
@@ -982,7 +1015,7 @@
 
     .calc-results {
       background: rgba(0,0,0,0.3);
-      border: 1px solid rgba(0,201,167,0.15);
+      border: 1px solid rgba(var(--teal-rgb), 0.15);
       border-radius: 12px;
       padding: 20px 24px;
       margin-top: 8px;
@@ -1047,9 +1080,9 @@
       max-width: 500px;
       width: 100%;
       padding: 36px 30px;
-      border: 1px solid rgba(0,201,167,0.4);
+      border: 1px solid rgba(var(--teal-rgb), 0.4);
       border-radius: 24px;
-      background: linear-gradient(160deg, rgba(0,201,167,0.06) 0%, rgba(0,0,0,0.2) 100%);
+      background: linear-gradient(160deg, rgba(var(--teal-rgb), 0.06) 0%, rgba(0,0,0,0.2) 100%);
       animation: pricing-glow 3s ease-in-out infinite;
       position: relative;
       display: flex;
@@ -1058,12 +1091,12 @@
     }
     .pricing-card:hover {
       border-color: var(--teal);
-      box-shadow: 0 0 28px var(--teal-glow), inset 0 0 20px rgba(0,201,167,0.04);
+      box-shadow: 0 0 28px var(--teal-glow), inset 0 0 20px rgba(var(--teal-rgb), 0.04);
       transform: translateY(-4px);
     }
     @keyframes pricing-glow {
-      0%, 100% { box-shadow: 0 0 30px rgba(0,201,167,0.2), 0 0 60px rgba(0,201,167,0.1); }
-      50% { box-shadow: 0 0 50px rgba(0,201,167,0.4), 0 0 100px rgba(0,201,167,0.2); }
+      0%, 100% { box-shadow: 0 0 30px rgba(var(--teal-rgb), 0.2), 0 0 60px rgba(var(--teal-rgb), 0.1); }
+      50% { box-shadow: 0 0 50px rgba(var(--teal-rgb), 0.4), 0 0 100px rgba(var(--teal-rgb), 0.2); }
     }
 
     .pricing-card-title {
@@ -1167,7 +1200,7 @@
        SLIDE 10 — CTA
     ============================================================ */
     #slide-10 {
-      background: linear-gradient(160deg, #0A0F1E 0%, #0d1a2e 50%, #0A0F1E 100%);
+      background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 50%, var(--navy) 100%);
       text-align: center;
     }
 
@@ -1212,7 +1245,7 @@
     .btn-primary:hover {
       background: #00e8c0;
       transform: translateY(-3px);
-      box-shadow: 0 8px 32px rgba(0,201,167,0.6);
+      box-shadow: 0 8px 32px rgba(var(--teal-rgb), 0.6);
     }
     .btn-secondary {
       display: inline-block;
@@ -1348,6 +1381,11 @@
 </head>
 <body>
 
+  <!-- Fixed Top-Left Logo -->
+  <a href="#slide-1" class="fixed-logo" onclick="goToSlide(0); return false;" aria-label="Conect-R Home">
+    <img src="conect-r-logo.jpg" alt="Conect-R Logo" />
+  </a>
+
   <!-- Top Actions Header -->
   <div class="top-actions">
     <button id="share-btn" onclick="sharePage()" aria-label="Share presentation">
@@ -1393,8 +1431,8 @@
       <div class="orb orb-1"></div>
       <div class="orb orb-2"></div>
 
-      <div class="hero-logo animate-in" style="position:relative;z-index:2;">
-        CONECT<span>-R</span>
+      <div class="hero-logo animate-in">
+        <img src="conect-r-logo.jpg" alt="Conect-R Logo" />
       </div>
 
       <h1 class="hero-headline animate-in delay-1" data-key="hero_headline">
@@ -1746,7 +1784,7 @@
             <span data-key="calc_r3">🤖 Ahorro estimado con chatbot IA</span>
             <span class="calc-result-val">$21,900/año</span>
           </div>
-          <div class="calc-result-row" style="border-top:1px solid rgba(0,201,167,0.3);margin-top:6px;padding-top:14px;">
+          <div class="calc-result-row" style="border-top:1px solid rgba(var(--teal-rgb), 0.3);margin-top:6px;padding-top:14px;">
             <span style="font-weight:700;color:var(--white);" data-key="calc_total">TOTAL AHORRADO AL AÑO</span>
             <span class="calc-result-val" id="r-total" style="font-size:1.1rem;">$26,200</span>
           </div>
@@ -2265,7 +2303,7 @@
         vx: (Math.random() - 0.5) * 0.3,
         vy: (Math.random() - 0.5) * 0.3,
         alpha: Math.random() * 0.5 + 0.1,
-        color: Math.random() > 0.6 ? '#00C9A7' : '#D4AF37',
+        color: Math.random() > 0.6 ? '#fe6e1a' : '#51a2ff',
       }));
 
       function draw() {
@@ -2315,6 +2353,13 @@
         if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
           const idx = slides.indexOf(entry.target);
           dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+          
+          // Toggle fixed-logo visibility based on current slide
+          const fixedLogo = document.querySelector('.fixed-logo');
+          if (fixedLogo) {
+            fixedLogo.style.opacity = idx === 0 ? '0' : '1';
+            fixedLogo.style.pointerEvents = idx === 0 ? 'none' : 'auto';
+          }
         }
       });
     }, { threshold: 0.5 });
