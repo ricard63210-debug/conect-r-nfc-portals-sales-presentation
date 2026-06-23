@@ -1032,19 +1032,47 @@
     ============================================================ */
     #slide-9 { background: var(--navy); }
 
-    .pricing-card {
-      max-width: 600px;
+    .pricing-container {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      align-items: stretch;
       width: 100%;
-      padding: 40px;
+      max-width: 1100px;
+      margin-top: 10px;
+    }
+
+    .pricing-card {
+      flex: 1;
+      max-width: 500px;
+      width: 100%;
+      padding: 36px 30px;
       border: 1px solid rgba(0,201,167,0.4);
       border-radius: 24px;
       background: linear-gradient(160deg, rgba(0,201,167,0.06) 0%, rgba(0,0,0,0.2) 100%);
       animation: pricing-glow 3s ease-in-out infinite;
       position: relative;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.35s ease;
+    }
+    .pricing-card:hover {
+      border-color: var(--teal);
+      box-shadow: 0 0 28px var(--teal-glow), inset 0 0 20px rgba(0,201,167,0.04);
+      transform: translateY(-4px);
     }
     @keyframes pricing-glow {
       0%, 100% { box-shadow: 0 0 30px rgba(0,201,167,0.2), 0 0 60px rgba(0,201,167,0.1); }
       50% { box-shadow: 0 0 50px rgba(0,201,167,0.4), 0 0 100px rgba(0,201,167,0.2); }
+    }
+
+    .pricing-card-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.2rem, 2vw, 1.5rem);
+      font-weight: 700;
+      color: var(--white);
+      text-align: center;
+      margin-bottom: 12px;
     }
 
     .pricing-badge {
@@ -1058,6 +1086,7 @@
       border-radius: 50px;
       margin-bottom: 20px;
       letter-spacing: 0.03em;
+      align-self: center;
     }
 
     .pricing-main {
@@ -1100,11 +1129,30 @@
     }
     .pricing-features li span:first-child { color: var(--teal); font-size: 1rem; }
 
+    .pricing-note {
+      font-size: 0.8rem;
+      color: var(--gray);
+      font-style: italic;
+      text-align: center;
+      margin-top: auto;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .pricing-savings {
+      text-align: center;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: clamp(0.95rem, 2vw, 1.25rem);
+      color: var(--teal);
+      margin-top: 24px;
+    }
+
     .pricing-value {
       text-align: center;
       font-family: var(--font-heading);
-      font-size: clamp(0.95rem, 2vw, 1.15rem);
       font-weight: 700;
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
       color: var(--teal);
       margin-bottom: 6px;
     }
@@ -1232,7 +1280,18 @@
 
       #nav-dots { display: none; }
 
-      .pricing-card { padding: 28px 20px; }
+      .pricing-container {
+        flex-direction: column;
+        align-items: center;
+        max-height: 70vh;
+        overflow-y: auto;
+        padding-right: 4px;
+      }
+      .pricing-card {
+        padding: 28px 20px;
+        max-width: 500px;
+        flex: none;
+      }
 
       .top-actions {
         top: 12px;
@@ -1266,19 +1325,22 @@
     .pain-grid::-webkit-scrollbar,
     .roi-grid::-webkit-scrollbar,
     .benefits-grid::-webkit-scrollbar,
-    .comparison-wrap::-webkit-scrollbar {
+    .comparison-wrap::-webkit-scrollbar,
+    .pricing-container::-webkit-scrollbar {
       width: 4px;
     }
     .pain-grid::-webkit-scrollbar-track,
     .roi-grid::-webkit-scrollbar-track,
     .benefits-grid::-webkit-scrollbar-track,
-    .comparison-wrap::-webkit-scrollbar-track {
+    .comparison-wrap::-webkit-scrollbar-track,
+    .pricing-container::-webkit-scrollbar-track {
       background: transparent;
     }
     .pain-grid::-webkit-scrollbar-thumb,
     .roi-grid::-webkit-scrollbar-thumb,
     .benefits-grid::-webkit-scrollbar-thumb,
-    .comparison-wrap::-webkit-scrollbar-thumb {
+    .comparison-wrap::-webkit-scrollbar-thumb,
+    .pricing-container::-webkit-scrollbar-thumb {
       background: var(--teal);
       border-radius: 4px;
     }
@@ -1710,65 +1772,132 @@
         Oferta de <span class="teal">lanzamiento</span>
       </h2>
 
-      <div class="pricing-card animate-in delay-1">
-        <div style="text-align:center;">
-          <span class="pricing-badge" data-key="price_badge">⚡ Precio especial por tiempo limitado</span>
+      <div class="pricing-container animate-in delay-1">
+        <!-- New Basic Plan Card -->
+        <div class="pricing-card">
+          <div style="text-align:center;">
+            <span class="pricing-badge" data-key="price_basic_badge">⚡ Plan de entrada perfecto</span>
+          </div>
+
+          <h3 class="pricing-card-title" data-key="price_basic_title">Plan Básico — Solo Menú</h3>
+
+          <div class="pricing-main">
+            <span class="pricing-amount" data-key="price_basic_amount">$49/mes</span>
+            <span class="pricing-original" data-key="price_basic_original">$99/mes</span>
+          </div>
+
+          <hr class="pricing-divider" />
+
+          <ul class="pricing-features">
+            <li><span>✅</span><span data-key="pf_basic_1">Menú digital con fotos y descripciones</span></li>
+            <li><span>✅</span><span data-key="pf_basic_2">1 actualización de menú al mes</span></li>
+            <li><span>✅</span><span data-key="pf_basic_3">Código QR listo para imprimir</span></li>
+            <li><span>✅</span><span data-key="pf_basic_4">Soporte incluido</span></li>
+          </ul>
+
+          <p class="pricing-note" data-key="price_basic_note">
+            Ideal para puestos y food trucks que quieren empezar sin compromiso.
+          </p>
+
+          <hr class="pricing-divider" />
+
+          <!-- NFC Stands Pricing Table -->
+          <div class="nfc-table-wrap">
+            <div class="nfc-table-title">📡 <span data-key="nfc_table_title">Stands NFC físicos</span></div>
+            <table class="nfc-table">
+              <thead>
+                <tr>
+                  <th data-key="nfc_col_qty">Cantidad</th>
+                  <th data-key="nfc_col_price">Precio por unidad</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-key="nfc_tier_1">1–49 stands</td>
+                  <td class="price-col">$20 c/u</td>
+                </tr>
+                <tr>
+                  <td data-key="nfc_tier_2">50–99 stands</td>
+                  <td class="price-col">$15 c/u</td>
+                </tr>
+                <tr>
+                  <td data-key="nfc_tier_3">100+ stands</td>
+                  <td class="price-col">$10 c/u</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="nfc-table-note" data-key="nfc_note">Los stands NFC se adquieren por separado</p>
+          </div>
         </div>
 
-        <div class="pricing-main">
-          <span class="pricing-amount" data-key="price_amount">$200/mes</span>
-          <span class="pricing-original" data-key="price_original">$450/mes</span>
+        <!-- Existing Premium Plan Card -->
+        <div class="pricing-card">
+          <div style="text-align:center;">
+            <span class="pricing-badge" data-key="price_badge">⚡ Precio especial por tiempo limitado</span>
+          </div>
+
+          <h3 class="pricing-card-title" data-key="price_pro_title">Plan Pro — Portal Completo</h3>
+
+          <div class="pricing-main">
+            <span class="pricing-amount" data-key="price_amount">$200/mes</span>
+            <span class="pricing-original" data-key="price_original">$450/mes</span>
+          </div>
+
+          <hr class="pricing-divider" />
+
+          <ul class="pricing-features">
+            <li><span>✅</span><span data-key="pf_1">Portal digital interactivo personalizado</span></li>
+            <li><span>✅</span><span data-key="pf_2">Menú digital con fotos y descripciones</span></li>
+            <li><span>✅</span><span data-key="pf_4">Chatbot con IA disponible 24/7</span></li>
+            <li><span>✅</span><span data-key="pf_5">Google Reviews, redes sociales y enlaces de eventos</span></li>
+            <li><span>✅</span><span data-key="pf_6">Sistema privado de quejas internas</span></li>
+            <li><span>✅</span><span data-key="pf_7">4 actualizaciones de menú al mes — envíanos en un solo mensaje todos los cambios que necesites y los aplicamos en un marco de 48 horas</span></li>
+            <li><span>✅</span><span data-key="pf_8">Soporte incluido</span></li>
+          </ul>
+
+          <hr class="pricing-divider" />
+
+          <!-- NFC Stands Pricing Table -->
+          <div class="nfc-table-wrap">
+            <div class="nfc-table-title">📡 <span data-key="nfc_table_title">Stands NFC físicos</span></div>
+            <table class="nfc-table">
+              <thead>
+                <tr>
+                  <th data-key="nfc_col_qty">Cantidad</th>
+                  <th data-key="nfc_col_price">Precio por unidad</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-key="nfc_tier_1">1–49 stands</td>
+                  <td class="price-col">$20 c/u</td>
+                </tr>
+                <tr>
+                  <td data-key="nfc_tier_2">50–99 stands</td>
+                  <td class="price-col">$15 c/u</td>
+                </tr>
+                <tr>
+                  <td data-key="nfc_tier_3">100+ stands</td>
+                  <td class="price-col">$10 c/u</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="nfc-table-note" data-key="nfc_note">Los stands NFC se adquieren por separado</p>
+          </div>
+
+          <hr class="pricing-divider" />
+
+          <p class="pricing-value" data-key="price_value">
+            Tú ahorras hasta $180,000 al año. Nosotros te cobramos $2,400.
+          </p>
+          <p class="pricing-question" data-key="price_question">¿Tiene sentido el negocio?</p>
         </div>
-
-        <hr class="pricing-divider" />
-
-        <ul class="pricing-features">
-          <li><span>✅</span><span data-key="pf_1">Portal digital interactivo personalizado</span></li>
-          <li><span>✅</span><span data-key="pf_2">Menú digital con fotos y descripciones</span></li>
-          <li><span>✅</span><span data-key="pf_4">Chatbot con IA disponible 24/7</span></li>
-          <li><span>✅</span><span data-key="pf_5">Google Reviews, redes sociales y enlaces de eventos</span></li>
-          <li><span>✅</span><span data-key="pf_6">Sistema privado de quejas internas</span></li>
-          <li><span>✅</span><span data-key="pf_7">4 actualizaciones de menú al mes — envíanos en un solo mensaje todos los cambios que necesites y los aplicamos en un marco de 48 horas</span></li>
-          <li><span>✅</span><span data-key="pf_8">Soporte incluido</span></li>
-        </ul>
-
-        <hr class="pricing-divider" />
-
-        <!-- NFC Stands Pricing Table -->
-        <div class="nfc-table-wrap">
-          <div class="nfc-table-title">📡 <span data-key="nfc_table_title">Stands NFC físicos</span></div>
-          <table class="nfc-table">
-            <thead>
-              <tr>
-                <th data-key="nfc_col_qty">Cantidad</th>
-                <th data-key="nfc_col_price">Precio por unidad</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td data-key="nfc_tier_1">1–49 stands</td>
-                <td class="price-col">$20 c/u</td>
-              </tr>
-              <tr>
-                <td data-key="nfc_tier_2">50–99 stands</td>
-                <td class="price-col">$15 c/u</td>
-              </tr>
-              <tr>
-                <td data-key="nfc_tier_3">100+ stands</td>
-                <td class="price-col">$10 c/u</td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="nfc-table-note" data-key="nfc_note">Los stands NFC se adquieren por separado</p>
-        </div>
-
-        <hr class="pricing-divider" />
-
-        <p class="pricing-value" data-key="price_value">
-          Tú ahorras hasta $180,000 al año. Nosotros te cobramos $2,400.
-        </p>
-        <p class="pricing-question" data-key="price_question">¿Tiene sentido el negocio?</p>
       </div>
+
+      <!-- Savings line at the bottom -->
+      <p class="pricing-savings animate-in delay-2" data-key="price_savings_note">
+        Empieza desde $49/mes — sin contrato, cancela cuando quieras.
+      </p>
     </section>
 
     <!-- ============================
@@ -1905,6 +2034,17 @@
         nfc_note: 'Los stands NFC se adquieren por separado',
         price_value: 'Tú ahorras hasta $180,000 al año. Nosotros te cobramos $2,400.',
         price_question: '¿Tiene sentido el negocio?',
+        price_basic_badge: '⚡ Plan de entrada perfecto',
+        price_basic_title: 'Plan Básico — Solo Menú',
+        price_basic_amount: '$49/mes',
+        price_basic_original: '$99/mes',
+        pf_basic_1: 'Menú digital con fotos y descripciones',
+        pf_basic_2: '1 actualización de menú al mes',
+        pf_basic_3: 'Código QR listo para imprimir',
+        pf_basic_4: 'Soporte incluido',
+        price_basic_note: 'Ideal para puestos y food trucks que quieren empezar sin compromiso.',
+        price_savings_note: 'Empieza desde <span class="gold">$49/mes</span> — sin contrato, cancela cuando quieras.',
+        price_pro_title: 'Plan Pro — Portal Completo',
         cta_title: '¿Listo para modernizar tu restaurante?',
         cta_sub: 'Conect-R te construye tu portal en días, no meses. Cupos limitados al precio de lanzamiento.',
         cta_btn1: 'Agenda tu demo gratis',
@@ -2008,6 +2148,17 @@
         nfc_note: 'NFC stands are purchased separately',
         price_value: 'You save up to $180,000/year. We charge you $2,400.',
         price_question: 'Does the math make sense?',
+        price_basic_badge: '⚡ Perfect entry plan',
+        price_basic_title: 'Basic Plan — Menu Only',
+        price_basic_amount: '$49/mo',
+        price_basic_original: '$99/mo',
+        pf_basic_1: 'Digital menu with photos and descriptions',
+        pf_basic_2: '1 menu update per month',
+        pf_basic_3: 'QR code ready to print',
+        pf_basic_4: 'Support included',
+        price_basic_note: 'Ideal for stalls and food trucks that want to start without commitment.',
+        price_savings_note: 'Start from <span class="gold">$49/mo</span> — no contract, cancel anytime.',
+        price_pro_title: 'Pro Plan — Full Portal',
         cta_title: 'Ready to modernize your restaurant?',
         cta_sub: 'Conect-R builds your portal in days, not months. Limited spots at launch pricing.',
         cta_btn1: 'Schedule Your Free Demo',
