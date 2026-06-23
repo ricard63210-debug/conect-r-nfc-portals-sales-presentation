@@ -303,9 +303,9 @@
       align-items: center;
     }
     .hero-logo img {
-      height: clamp(50px, 8vw, 75px);
+      height: clamp(100px, 16vw, 150px);
       object-fit: contain;
-      mix-blend-mode: multiply;
+      mix-blend-mode: normal;
     }
     
     /* Fixed Top-Left Logo */
@@ -314,7 +314,7 @@
       top: 20px;
       left: 20px;
       z-index: 9999;
-      height: 40px;
+      height: 80px;
       display: flex;
       align-items: center;
       transition: all 0.3s ease, opacity 0.4s ease;
@@ -324,7 +324,7 @@
     .fixed-logo img {
       height: 100%;
       object-fit: contain;
-      mix-blend-mode: multiply;
+      mix-blend-mode: normal;
     }
     .fixed-logo:hover {
       transform: scale(1.05);
@@ -334,7 +334,7 @@
       .fixed-logo {
         top: 12px;
         left: 12px;
-        height: 32px;
+        height: 64px;
       }
     }
 
@@ -1383,7 +1383,7 @@
 
   <!-- Fixed Top-Left Logo -->
   <a href="#slide-1" class="fixed-logo" onclick="goToSlide(0); return false;" aria-label="Conect-R Home">
-    <img src="conect-r-logo.jpg" alt="Conect-R Logo" />
+    <img src="conect-r-logo.png" alt="Conect-R Logo" />
   </a>
 
   <!-- Top Actions Header -->
@@ -1432,7 +1432,7 @@
       <div class="orb orb-2"></div>
 
       <div class="hero-logo animate-in">
-        <img src="conect-r-logo.jpg" alt="Conect-R Logo" />
+        <img src="conect-r-logo.png" alt="Conect-R Logo" />
       </div>
 
       <h1 class="hero-headline animate-in delay-1" data-key="hero_headline">
@@ -1471,21 +1471,21 @@
         <div class="card pain-card animate-in delay-1">
           <div class="pain-icon">🖨️</div>
           <div>
-            <h3>$4,800</h3>
+            <h3>$2,400</h3>
             <p data-key="pain_1">Un restaurante mediano gasta $2,400–$4,800 al año solo en impresión</p>
           </div>
         </div>
         <div class="card pain-card animate-in delay-2">
           <div class="pain-icon">🎨</div>
           <div>
-            <h3>$10,000</h3>
+            <h3>$5,000</h3>
             <p data-key="pain_2">Rediseños + diseñador gráfico: hasta $10,000 anuales</p>
           </div>
         </div>
         <div class="card pain-card animate-in delay-3">
           <div class="pain-icon">⏱️</div>
           <div>
-            <h3>180 hrs</h3>
+            <h3>90 hrs</h3>
             <p data-key="pain_3">180+ horas al año sanitizando menús físicos</p>
           </div>
         </div>
@@ -1632,13 +1632,13 @@
           <div class="roi-icon">🖨️</div>
           <h3 data-key="mroi_1_title">Impresión eliminada</h3>
           <p data-key="mroi_1_body">Dejas de gastar entre $2,400 y $4,800 al año en reimpresiones, diseñadores y materiales</p>
-          <span class="roi-number">Hasta $4,800/año</span>
+          <span class="roi-number" data-key="mroi_1_num">Hasta $2,400/año</span>
         </div>
         <div class="card roi-card animate-in delay-2">
           <div class="roi-icon">⏱️</div>
-          <h3 data-key="mroi_2_title">180+ horas recuperadas</h3>
+          <h3 data-key="mroi_2_title">90+ horas recuperadas</h3>
           <p data-key="mroi_2_body">Tu equipo deja de sanitizar, organizar y reemplazar menús físicos. Ese tiempo vale dinero.</p>
-          <span class="roi-number" data-key="mroi_2_num">Hasta $2,700/año en labor</span>
+          <span class="roi-number" data-key="mroi_2_num">Hasta $1,350/año en labor</span>
           <span class="roi-note" data-key="mroi_2_note">(basado en $15/hr × 180 horas)</span>
         </div>
         <div class="card roi-card animate-in delay-3">
@@ -1671,8 +1671,8 @@
           <h3 data-key="croi_1_title">Llamadas reducidas</h3>
           <p data-key="croi_1_body">El chatbot responde automáticamente: horarios, dirección, menú, reservaciones, eventos y más. Un restaurante recibe entre 20 y 50 llamadas repetitivas por día.</p>
           <p style="font-size:0.82rem;color:var(--gray-light);margin-bottom:12px;" data-key="croi_1_sub">Ahorro estimado en tiempo de staff: 2–4 horas diarias</p>
-          <span class="roi-number" data-key="croi_1_num">Hasta $21,900/año en labor</span>
-          <span class="roi-note" data-key="croi_1_note">(basado en $15/hr × 4 hrs × 365 días)</span>
+          <span class="roi-number" data-key="croi_1_num">Hasta $10,950/año en labor</span>
+          <span class="roi-note" data-key="croi_1_note">(basado en $15/hr × 2 hrs × 365 días)</span>
         </div>
         <div class="card roi-card animate-in delay-2">
           <div class="roi-icon">🌙</div>
@@ -1777,12 +1777,12 @@
             <span class="calc-result-val" id="r-print">$1,600/año</span>
           </div>
           <div class="calc-result-row">
-            <span data-key="calc_r2">⏱️ Ahorro en labor (180 hrs × $15)</span>
-            <span class="calc-result-val">$2,700</span>
+            <span data-key="calc_r2">⏱️ Ahorro en labor (90 hrs × $15)</span>
+            <span class="calc-result-val">$1,350</span>
           </div>
           <div class="calc-result-row">
             <span data-key="calc_r3">🤖 Ahorro estimado con chatbot IA</span>
-            <span class="calc-result-val">$21,900/año</span>
+            <span class="calc-result-val" id="r-chatbot">$10,950/año</span>
           </div>
           <div class="calc-result-row" style="border-top:1px solid rgba(var(--teal-rgb), 0.3);margin-top:6px;padding-top:14px;">
             <span style="font-weight:700;color:var(--white);" data-key="calc_total">TOTAL AHORRADO AL AÑO</span>
@@ -1982,9 +1982,10 @@
         hero_scroll: 'Desliza para ver',
         prob_title: 'El problema con los <span class="teal">menús físicos</span>',
         prob_sub: 'Los números no mienten — cada día sin un portal digital te cuesta dinero real',
-        pain_1: 'Un restaurante mediano gasta $2,400–$4,800 al año solo en impresión',
-        pain_2: 'Rediseños + diseñador gráfico: hasta $10,000 anuales',
-        pain_3: '180+ horas al año sanitizando menús físicos',
+        pain_1: 'Un restaurante gasta $1,200–$2,400 al año solo en impresión',
+        mroi_1_num: 'Hasta $2,400/año',
+        pain_2: 'Rediseños + diseñador gráfico: hasta $5,000 anuales',
+        pain_3: '90+ horas al año sanitizando menús físicos',
         pain_4: 'Menús desactualizados frustran al 86% de los clientes',
         sol_title: 'Tu portal digital <span class="teal">Conect-R</span>',
         sol_1: 'Menú digital interactivo con fotos y precios actualizables al instante',
@@ -2003,21 +2004,21 @@
         comp_stat: '📊 Los menús con fotos aumentan el ticket promedio hasta un <span class="gold">30%</span>',
         mroi_title: 'Lo que te ahorra el <span class="teal">menú digital</span> al año',
         mroi_1_title: 'Impresión eliminada',
-        mroi_1_body: 'Dejas de gastar entre $2,400 y $4,800 al año en reimpresiones, diseñadores y materiales',
-        mroi_2_title: '180+ horas recuperadas',
+        mroi_1_body: 'Dejas de gastar entre $1,200 y $2,400 al año en reimpresiones, diseñadores y materiales',
+        mroi_2_title: '90+ horas recuperadas',
         mroi_2_body: 'Tu equipo deja de sanitizar, organizar y reemplazar menús físicos. Ese tiempo vale dinero.',
-        mroi_2_num: 'Hasta $2,700/año en labor',
-        mroi_2_note: '(basado en $15/hr × 180 horas)',
+        mroi_2_num: 'Hasta $1,350/año en labor',
+        mroi_2_note: '(basado en $15/hr × 90 horas)',
         mroi_3_title: 'Ticket promedio más alto',
         mroi_3_body: 'Los menús con fotos y descripciones generan hasta 30% más por mesa. En un restaurante con $500K en ventas anuales eso son $150,000 adicionales.',
-        mroi_total: '💰 Beneficio económico estimado del menú digital: <strong>$7,500–$157,500 al año</strong> según el volumen de tu restaurante',
+        mroi_total: '💰 Beneficio económico estimado del menú digital: <strong>$3,750–$78,750 al año</strong> según el volumen de tu restaurante',
         croi_title: 'Lo que te ahorra el <span class="teal">chatbot con IA</span> al año',
         croi_intro: 'Tu portal incluye un asistente virtual inteligente disponible 24/7 que responde preguntas, toma reservaciones y guía a tus clientes — sin que tú ni tu equipo levanten el teléfono.',
         croi_1_title: 'Llamadas reducidas',
         croi_1_body: 'El chatbot responde automáticamente: horarios, dirección, menú, reservaciones, eventos y más. Un restaurante recibe entre 20 y 50 llamadas repetitivas por día.',
-        croi_1_sub: 'Ahorro estimado en tiempo de staff: 2–4 horas diarias',
-        croi_1_num: 'Hasta $21,900/año en labor',
-        croi_1_note: '(basado en $15/hr × 4 hrs × 365 días)',
+        croi_1_sub: 'Ahorro estimado en tiempo de staff: 1–2 horas diarias',
+        croi_1_num: 'Hasta $10,950/año en labor',
+        croi_1_note: '(basado en $15/hr × 2 hrs × 365 días)',
         croi_2_title: 'Atención fuera de horario',
         croi_2_body: 'El chatbot trabaja cuando tu restaurante está cerrado. Captura clientes que de otra forma llamarían a la competencia.',
         croi_2_sub: 'Reservaciones e información disponibles las 24 horas, los 7 días de la semana',
@@ -2025,7 +2026,7 @@
         croi_3_body: 'Clientes que obtienen respuesta inmediata tienen 70% más probabilidad de regresar y dejar una reseña positiva.',
         croi_3_sub: 'Más reseñas = más visibilidad en Google = más clientes nuevos',
         croi_3_num: '+70% retención',
-        croi_total: '🤖 Beneficio económico estimado del chatbot IA: <strong>$15,000–$22,000 al año</strong> en tiempo de staff recuperado',
+        croi_total: '🤖 Beneficio económico estimado del chatbot IA: <strong>$7,500–$11,000 al año</strong> en tiempo de staff recuperado',
         port_title: 'Lo que te genera el <span class="teal">portal completo</span> al año',
         port_sub: 'Tu portal no es solo un menú — es tu presencia digital completa funcionando para ti las 24 horas.',
         ben_1_title: 'Eventos y Catering',
@@ -2040,13 +2041,13 @@
         ben_5_body: 'Tráfico directo a tu página oficial desde cada escaneo NFC',
         ben_6_title: 'Actualizaciones de Menú',
         ben_6_body: '4 actualizaciones al mes — envíanos en un solo mensaje todos los cambios que necesites y los aplicamos en un marco de 48 horas',
-        port_total: '🏆 Beneficio económico total estimado del portal: <strong>$25,000–$180,000 al año</strong>',
+        port_total: '🏆 Beneficio económico total estimado del portal: <strong>$12,500–$90,000 al año</strong>',
         calc_title: '¿Cuánto puedes <span class="teal">ahorrar?</span>',
         calc_slider_label: '¿Cuántas veces reimprimes tu menú al año?',
         calc_times: ' veces',
         calc_cost_label: 'Costo por reimpresión ($)',
         calc_r1: '💸 Gastas actualmente en impresión',
-        calc_r2: '⏱️ Ahorro en labor (180 hrs × $15)',
+        calc_r2: '⏱️ Ahorro en labor (90 hrs × $15)',
         calc_r3: '🤖 Ahorro estimado con chatbot IA',
         calc_total: 'TOTAL AHORRADO AL AÑO',
         calc_cost: '💳 Costo Conect-R ($200/mes)',
@@ -2070,7 +2071,7 @@
         nfc_tier_2: '50–99 stands',
         nfc_tier_3: '100+ stands',
         nfc_note: 'Los stands NFC se adquieren por separado',
-        price_value: 'Tú ahorras hasta $180,000 al año. Nosotros te cobramos $2,400.',
+        price_value: 'Tú ahorras hasta $90,000 al año. Nosotros te cobramos $2,400.',
         price_question: '¿Tiene sentido el negocio?',
         price_basic_badge: '⚡ Plan de entrada perfecto',
         price_basic_title: 'Plan Básico — Solo Menú',
@@ -2096,9 +2097,10 @@
         hero_scroll: 'Scroll to explore',
         prob_title: 'The Problem with <span class="teal">Printed Menus</span>',
         prob_sub: 'The numbers don\'t lie — every day without a digital portal costs you real money',
-        pain_1: 'A mid-size restaurant spends $2,400–$4,800/year on printing alone',
-        pain_2: 'Redesigns + graphic designer: up to $10,000/year',
-        pain_3: '180+ hours/year sanitizing physical menus',
+        pain_1: 'A restaurant spends $1,200–$2,400/year on printing alone',
+        mroi_1_num: 'Up to $2,400/year',
+        pain_2: 'Redesigns + graphic designer: up to $5,000/year',
+        pain_3: '90+ hours/year sanitizing physical menus',
         pain_4: 'Outdated menus frustrate 86% of customers',
         sol_title: 'Your <span class="teal">Conect-R</span> Digital Portal',
         sol_1: 'Interactive digital menu with instantly updatable photos and prices',
@@ -2117,21 +2119,21 @@
         comp_stat: '📊 Menus with photos increase the average ticket by up to <span class="gold">30%</span>',
         mroi_title: 'What the <span class="teal">Digital Menu</span> Saves You Per Year',
         mroi_1_title: 'Printing Eliminated',
-        mroi_1_body: 'Stop spending $2,400–$4,800/year on reprints, designers and materials',
-        mroi_2_title: '180+ Hours Recovered',
+        mroi_1_body: 'Stop spending $1,200–$2,400/year on reprints, designers and materials',
+        mroi_2_title: '90+ Hours Recovered',
         mroi_2_body: 'Your team stops sanitizing, organizing and replacing physical menus. That time is money.',
-        mroi_2_num: 'Up to $2,700/year in labor',
-        mroi_2_note: '(based on $15/hr × 180 hours)',
+        mroi_2_num: 'Up to $1,350/year in labor',
+        mroi_2_note: '(based on $15/hr × 90 hours)',
         mroi_3_title: 'Higher Average Ticket',
         mroi_3_body: 'Menus with photos and descriptions generate up to 30% more per table. In a restaurant with $500K annual sales that\'s $150,000 extra.',
-        mroi_total: '💰 Estimated economic benefit of the digital menu: <strong>$7,500–$157,500/year</strong> depending on your restaurant\'s volume',
+        mroi_total: '💰 Estimated economic benefit of the digital menu: <strong>$3,750–$78,750/year</strong> depending on your restaurant\'s volume',
         croi_title: 'What the <span class="teal">AI Chatbot</span> Saves You Per Year',
         croi_intro: 'Your portal includes a smart virtual assistant available 24/7 that answers questions, takes reservations and guides your customers — without you or your team picking up the phone.',
         croi_1_title: 'Reduced Calls',
         croi_1_body: 'The chatbot automatically answers: hours, address, menu, reservations, events and more. A restaurant receives 20–50 repetitive calls per day.',
-        croi_1_sub: 'Estimated staff time saved: 2–4 hours daily',
-        croi_1_num: 'Up to $21,900/year in labor',
-        croi_1_note: '(based on $15/hr × 4 hrs × 365 days)',
+        croi_1_sub: 'Estimated staff time saved: 1–2 hours daily',
+        croi_1_num: 'Up to $10,950/year in labor',
+        croi_1_note: '(based on $15/hr × 2 hrs × 365 days)',
         croi_2_title: 'After-Hours Service',
         croi_2_body: 'The chatbot works when your restaurant is closed. It captures customers who would otherwise call the competition.',
         croi_2_sub: 'Reservations and information available 24 hours, 7 days a week',
@@ -2139,7 +2141,7 @@
         croi_3_body: 'Customers who get an immediate response are 70% more likely to return and leave a positive review.',
         croi_3_sub: 'More reviews = more Google visibility = more new customers',
         croi_3_num: '+70% retention',
-        croi_total: '🤖 Estimated economic benefit of AI chatbot: <strong>$15,000–$22,000/year</strong> in recovered staff time',
+        croi_total: '🤖 Estimated economic benefit of AI chatbot: <strong>$7,500–$11,000/year</strong> in recovered staff time',
         port_title: 'What the <span class="teal">Full Portal</span> Generates Per Year',
         port_sub: "Your portal isn't just a menu — it's your complete digital presence working for you 24 hours a day.",
         ben_1_title: 'Events & Catering',
@@ -2154,13 +2156,13 @@
         ben_5_body: 'Direct traffic to your official page from every NFC scan',
         ben_6_title: 'Menu Updates',
         ben_6_body: '4 updates per month — send us all the changes you need in one message and we apply them within 48 hours',
-        port_total: '🏆 Estimated total economic benefit of the portal: <strong>$25,000–$180,000/year</strong>',
+        port_total: '🏆 Estimated total economic benefit of the portal: <strong>$12,500–$90,000/year</strong>',
         calc_title: 'How Much Can You <span class="teal">Save?</span>',
         calc_slider_label: 'How many times do you reprint your menu per year?',
         calc_times: ' times',
         calc_cost_label: 'Cost per reprint ($)',
         calc_r1: '💸 You currently spend on printing',
-        calc_r2: '⏱️ Labor savings (180 hrs × $15)',
+        calc_r2: '⏱️ Labor savings (90 hrs × $15)',
         calc_r3: '🤖 Estimated savings with AI chatbot',
         calc_total: 'TOTAL SAVED PER YEAR',
         calc_cost: '💳 Conect-R cost ($200/month)',
@@ -2184,7 +2186,7 @@
         nfc_tier_2: '50–99 stands',
         nfc_tier_3: '100+ stands',
         nfc_note: 'NFC stands are purchased separately',
-        price_value: 'You save up to $180,000/year. We charge you $2,400.',
+        price_value: 'You save up to $90,000/year. We charge you $2,400.',
         price_question: 'Does the math make sense?',
         price_basic_badge: '⚡ Perfect entry plan',
         price_basic_title: 'Basic Plan — Menu Only',
@@ -2224,6 +2226,15 @@
         }
       });
 
+      // Update chatbot savings text dynamically in calculator
+      const chatbotValEl = document.getElementById('r-chatbot');
+      if (chatbotValEl) {
+        chatbotValEl.textContent = currentLang === 'es' ? '$10,950/año' : '$10,950/year';
+      }
+
+      // Trigger calculator refresh to update label format
+      updateCalc();
+
       // Update SMS CTA button links based on language
       const smsHref = currentLang === 'es'
         ? 'sms:+19168120873&body=Hola%20Ricardo%2C%20me%20interesa%20agendar%20una%20demo%20de%20Conect-R%20para%20mi%20restaurante.'
@@ -2248,13 +2259,13 @@
       document.getElementById('reprint-val').textContent = reprints;
 
       const printSpend = reprints * costPerReprint;
-      const laborSavings = 2700;
-      const chatbotSavings = 21900;
+      const laborSavings = 1350;
+      const chatbotSavings = 10950;
       const totalSavings = printSpend + laborSavings + chatbotSavings;
       const conect_r_cost = 2400;
       const netGain = totalSavings - conect_r_cost;
 
-      document.getElementById('r-print').textContent = fmtCurrency(printSpend) + '/año';
+      document.getElementById('r-print').textContent = fmtCurrency(printSpend) + (currentLang === 'es' ? '/año' : '/year');
       document.getElementById('r-total').textContent = fmtCurrency(totalSavings);
       animateNumber('net-gain', netGain);
     }
