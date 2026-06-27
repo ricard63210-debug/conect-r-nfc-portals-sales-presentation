@@ -1377,6 +1377,182 @@
       background: var(--teal);
       border-radius: 4px;
     }
+
+    /* Examples Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 12, 16, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .modal-content {
+      background: linear-gradient(135deg, rgba(14, 17, 23, 0.95) 0%, rgba(8, 9, 12, 0.98) 100%);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      position: relative;
+      transform: scale(0.9) translateY(20px);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px var(--teal-glow);
+    }
+    
+    .modal-overlay.open .modal-content {
+      transform: scale(1) translateY(0);
+    }
+    
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--gray-light);
+      font-size: 1.5rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      line-height: 1;
+    }
+    
+    .modal-close:hover {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: var(--navy);
+      transform: rotate(90deg);
+    }
+    
+    .modal-heading {
+      font-family: var(--font-heading);
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+      text-align: left;
+      line-height: 1.2;
+    }
+    
+    .modal-subtitle-text {
+      color: var(--gray);
+      font-size: 0.95rem;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+    
+    .modal-options {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .modal-option-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      cursor: pointer;
+    }
+    
+    .modal-option-card:hover {
+      border-color: var(--teal);
+      background: rgba(254, 110, 26, 0.06);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(254, 110, 26, 0.15);
+    }
+    
+    .option-icon {
+      font-size: 2.2rem;
+      background: rgba(255, 255, 255, 0.05);
+      width: 60px;
+      height: 60px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .modal-option-card:hover .option-icon {
+      background: var(--teal);
+      transform: scale(1.05);
+    }
+    
+    .option-details {
+      flex: 1;
+    }
+    
+    .option-title {
+      font-family: var(--font-body);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    
+    .option-desc {
+      color: var(--gray-light);
+      font-size: 0.8rem;
+      line-height: 1.4;
+    }
+    
+    .option-action-btn {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--teal);
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      transition: transform 0.3s ease;
+    }
+    
+    .modal-option-card:hover .option-action-btn {
+      transform: translateX(4px);
+    }
+
+    @media (max-width: 576px) {
+      .modal-content {
+        padding: 30px 20px;
+      }
+      .modal-option-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      .option-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.8rem;
+      }
+      .option-action-btn {
+        align-self: flex-end;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1403,6 +1579,37 @@
 
   <!-- Toast Notification -->
   <div id="toast" class="toast" role="alert" aria-live="polite"></div>
+
+  <!-- Examples Modal -->
+  <div id="examples-modal" class="modal-overlay" aria-hidden="true" role="dialog" aria-labelledby="modal-title">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeExampleModal()" aria-label="Close modal">&times;</button>
+      <h3 id="modal-title" class="modal-heading" data-key="modal_title">Ver ejemplo en vivo</h3>
+      <p class="modal-subtitle-text" data-key="modal_subtitle">Elige cuál de nuestros portales interactivos te gustaría explorar:</p>
+      
+      <div class="modal-options">
+        <!-- Option 1: Tacos Lupe -->
+        <a href="https://portal-puesto-demo.vercel.app/" target="_blank" rel="noopener noreferrer" class="modal-option-card">
+          <div class="option-icon">🌮</div>
+          <div class="option-details">
+            <h4 data-key="modal_lupe_title" class="option-title">El Rincón de Lupe</h4>
+            <p data-key="modal_lupe_desc" class="option-desc">Formato Puesto / Food Truck. Menú digital simple con asistente de IA y diseño urbano optimizado para móviles.</p>
+          </div>
+          <span class="option-action-btn" data-key="modal_view_btn">Explorar Portal ➔</span>
+        </a>
+
+        <!-- Option 2: Maya Cantina -->
+        <a href="https://maya-cantina-portal.vercel.app/" target="_blank" rel="noopener noreferrer" class="modal-option-card">
+          <div class="option-icon">🍹</div>
+          <div class="option-details">
+            <h4 data-key="modal_maya_title" class="option-title">Maya Cantina</h4>
+            <p data-key="modal_maya_desc" class="option-desc">Formato Restaurante Elegante. Menú completo con fotografía premium, branding a la medida y navegación por categorías.</p>
+          </div>
+          <span class="option-action-btn" data-key="modal_view_btn">Explorar Portal ➔</span>
+        </a>
+      </div>
+    </div>
+  </div>
 
   <!-- Navigation Dots -->
   <nav id="nav-dots" aria-label="Slide navigation">
@@ -1446,7 +1653,7 @@
         <a href="sms:+19168120873&body=Hola%20Ricardo%2C%20me%20interesa%20agendar%20una%20demo%20de%20Conect-R%20para%20mi%20restaurante." class="btn-primary sms-cta" id="hero-btn-primary" data-key="cta_btn1">
           Agenda tu demo gratis
         </a>
-        <a href="https://maya-cantina-portal.vercel.app" class="btn-secondary" target="_blank" rel="noopener noreferrer" id="hero-btn-secondary" data-key="cta_btn2">
+        <a href="javascript:void(0)" class="btn-secondary" id="hero-btn-secondary" onclick="openExampleModal();" data-key="cta_btn2">
           Ver ejemplo en vivo
         </a>
       </div>
@@ -1600,8 +1807,8 @@
               <div class="iphone-side-btn"></div>
               <div class="iphone-screen">
                 <iframe
-                  src="https://maya-cantina-portal.vercel.app/menu"
-                  title="Maya Cantina Digital Menu"
+                  src="https://portal-puesto-demo.vercel.app/"
+                  title="El Rincón de Lupe Digital Menu"
                   loading="lazy"
                   scrolling="yes"
                   allow="autoplay"
@@ -1956,7 +2163,7 @@
         <a href="sms:+19168120873&body=Hola%20Ricardo%2C%20me%20interesa%20agendar%20una%20demo%20de%20Conect-R%20para%20mi%20restaurante." class="btn-primary sms-cta" id="cta-btn-primary" data-key="cta_btn1">
           Agenda tu demo gratis
         </a>
-        <a href="https://maya-cantina-portal.vercel.app" class="btn-secondary" target="_blank" rel="noopener noreferrer" id="cta-btn-secondary" data-key="cta_btn2">
+        <a href="javascript:void(0)" class="btn-secondary" id="cta-btn-secondary" onclick="openExampleModal();" data-key="cta_btn2">
           Ver ejemplo en vivo
         </a>
       </div>
@@ -2090,6 +2297,13 @@
         cta_btn2: 'Ver ejemplo en vivo',
         lang_btn: '🌐 EN',
         share_btn_text: 'Compartir',
+        modal_title: 'Ver ejemplo en vivo',
+        modal_subtitle: 'Elige cuál de nuestros portales interactivos te gustaría explorar:',
+        modal_lupe_title: 'El Rincón de Lupe',
+        modal_lupe_desc: 'Formato Puesto / Food Truck. Menú digital simple con asistente de IA y diseño urbano optimizado para móviles.',
+        modal_maya_title: 'Maya Cantina',
+        modal_maya_desc: 'Formato Restaurante Elegante. Menú completo con fotografía premium, branding a la medida y navegación por categorías.',
+        modal_view_btn: 'Explorar Portal ➔',
       },
       en: {
         hero_headline: 'How Much Is Your Printed Menu Costing You?',
@@ -2205,6 +2419,13 @@
         cta_btn2: 'See a Live Example',
         lang_btn: '🌐 ES',
         share_btn_text: 'Share',
+        modal_title: 'See Live Example',
+        modal_subtitle: 'Choose which of our interactive portals you would like to explore:',
+        modal_lupe_title: 'El Rincón de Lupe',
+        modal_lupe_desc: 'Food Stall / Food Truck format. Simple digital menu with AI assistant and urban design optimized for mobile.',
+        modal_maya_title: 'Maya Cantina',
+        modal_maya_desc: 'Elegant Restaurant format. Full menu with premium photography, custom branding and category navigation.',
+        modal_view_btn: 'Explore Portal ➔',
       }
     };
 
@@ -2431,6 +2652,35 @@
         toast.classList.remove('show');
       }, 3000);
     }
+
+    /* =========================================================
+       EXAMPLES MODAL FUNCTIONALITY
+    ========================================================= */
+    function openExampleModal() {
+      const modal = document.getElementById('examples-modal');
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeExampleModal() {
+      const modal = document.getElementById('examples-modal');
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    // Close on overlay click
+    document.getElementById('examples-modal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeExampleModal();
+      }
+    });
+
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeExampleModal();
+      }
+    });
 
     /* =========================================================
        INIT
