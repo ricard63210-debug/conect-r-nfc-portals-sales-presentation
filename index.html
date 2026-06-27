@@ -2429,7 +2429,7 @@
       }
     };
 
-    let currentLang = 'es';
+    let currentLang = 'en';
 
     function toggleLang() {
       currentLang = currentLang === 'es' ? 'en' : 'es';
@@ -2437,6 +2437,7 @@
     }
 
     function applyLang() {
+      document.documentElement.lang = currentLang;
       const t = LANG[currentLang];
       document.getElementById('lang-toggle').textContent = t.lang_btn;
 
@@ -2685,6 +2686,7 @@
     /* =========================================================
        INIT
     ========================================================= */
+    applyLang();
     updateCalc();
   </script>
 </body>
