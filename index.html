@@ -1281,11 +1281,24 @@
     @media (max-width: 768px) {
       body { overflow: hidden; }
 
+      .scroll-container {
+        scroll-snap-type: none;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .slide {
+        scroll-snap-align: none;
+        scroll-snap-stop: unset;
+        min-height: auto;
+        height: auto;
+        padding-top: 100px;
+        padding-bottom: 60px;
+      }
+
       .pain-grid {
         grid-template-columns: 1fr;
-        max-height: 70vh;
-        overflow-y: auto;
-        padding-right: 4px;
+        padding-right: 0;
       }
 
       .solution-layout {
@@ -1296,15 +1309,11 @@
 
       .comparison-wrap {
         grid-template-columns: 1fr;
-        max-height: 65vh;
-        overflow-y: auto;
       }
 
       .roi-grid, .benefits-grid {
         grid-template-columns: 1fr;
-        max-height: 65vh;
-        overflow-y: auto;
-        padding-right: 4px;
+        padding-right: 0;
       }
 
       .calc-card { padding: 24px 20px; }
@@ -1316,9 +1325,7 @@
       .pricing-container {
         flex-direction: column;
         align-items: center;
-        max-height: 70vh;
-        overflow-y: auto;
-        padding-right: 4px;
+        padding-right: 0;
       }
       .pricing-card {
         padding: 28px 20px;
